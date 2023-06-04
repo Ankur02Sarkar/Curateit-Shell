@@ -1,4 +1,4 @@
-.radial-grad {
+/* .radial-grad {
   background-image: radial-gradient(circle at 50% 45%, rgb(120, 166, 236, 0.2) 10%, white);
 }
 
@@ -6,7 +6,6 @@ div.ReactTags__tags {
   position: relative;
 }
 
-/* Styles for the input */
 div.ReactTags__tagInput {
   width: 100%;
   border-radius: 2px;
@@ -25,12 +24,10 @@ div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
   margin: 0;
   font-size: 12px;
   width: 100%;
-  /* border: 1px solid #eee; */
   padding: 0 4px;
   outline: none;
 }
 
-/* Styles for selected tags */
 div.ReactTags__selected span.ReactTags__tag {
   border: 1px solid #ddd;
   background: #95b9f017;
@@ -48,7 +45,7 @@ div.ReactTags__selected button.ReactTags__remove {
   cursor: pointer;
 }
 
-/* Styles for suggestions */
+
 div.ReactTags__suggestions {
   position: absolute;
   color: #000 !important;
@@ -91,4 +88,359 @@ div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
   cursor: pointer;
   width: 100%;
   z-index: 99999999999999999 !important;
+} */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #f7f1f1;
+  font-size: 1.1rem;
+  font-family: 'Quicksand', sans-serif;
+}
+
+@keyframes strikeitem {
+  to {
+    width: calc(100% + 1rem);
+  }
+}
+
+#todolist {
+  padding: 2rem 3rem 3rem;
+  text-align: center;
+  max-width: 700px;
+  /* background-image: linear-gradient(315deg, #ffab00 0%, #ff5159 74%); */
+  background: #f2f8fa;
+  color: #25374e;
+  /* overflow: auto; */
+}
+
+#todolist h1 {
+  font-weight: normal;
+  font-size: 2.3rem;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid rgba(255, 255, 255, .3);
+}
+
+#todolist h1 span {
+  display: block;
+  font-size: 0.8rem;
+  margin-bottom: 0.7rem;
+  margin-left: 3px;
+  margin-top: 0.2rem;
+}
+
+#todolist .emptylist {
+  margin-top: 2.6rem;
+  text-align: center;
+  letter-spacing: .05em;
+  font-style: italic;
+  opacity: 0.8;
+
+}
+
+#todolist ul {
+  margin-top: 2.6rem;
+  list-style: none;
+}
+
+#todolist .todolist-move {
+  transition: transform 1s;
+}
+
+#todolist li {
+  display: flex;
+  margin: 0 -3rem 4px;
+  padding: 1.1rem 3rem;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+#todolist .actions {
+  flex-shrink: 0;
+  padding-left: 0.7em;
+}
+
+#todolist .label {
+  position: relative;
+  transition: opacity .2s linear;
+}
+
+#todolist .done .label {
+  opacity: .6;
+}
+
+#todolist .done .label:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -.5rem;
+  display: block;
+  width: 0%;
+  height: 1px;
+  background: #FFF;
+  animation: strikeitem .3s ease-out 0s forwards;
+}
+
+#todolist .btn-picto {
+  border: none;
+  background: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  color: black;
+}
+
+
+
+form {
+  margin-top: 3rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: center;
+}
+
+form label {
+  min-width: 100%;
+  margin-bottom: .5rem;
+  font-size: 1.3rem;
+}
+
+input {
+  flex-grow: 1;
+  border: none;
+  /* background: #f7f1f1; */
+  padding: 0 1.5em;
+  font-size: initial;
+}
+
+.linkBtn,
+.textBtn,
+button {
+  padding: 0 1.3rem;
+  border: none;
+  background: #105ed3f1;
+  color: white;
+  text-transform: uppercase;
+  font-weight: bold;
+  border: 1px solid rgba(255, 255, 255, .3);
+  margin-left: 5px;
+  cursor: pointer;
+  transition: background .2s ease-out;
+}
+
+.linkBtn:hover,
+.textBtn:hover,
+button:hover {
+  background: #105ed3;
+}
+
+input,
+.linkBtn,
+.textBtn,
+button {
+  font-family: 'Quicksand', sans-serif;
+  height: 3rem;
+}
+
+.togglebutton-wrapper {
+  margin-top: 1em;
+}
+
+.togglebutton-wrapper label {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.togglebutton-wrapper input {
+  position: absolute;
+  left: -9999px;
+}
+
+.togglebutton-wrapper .togglebutton-label {
+  font-size: .8rem;
+  letter-spacing: .1em
+}
+
+.togglebutton-wrapper .tooglebutton-box {
+  position: relative;
+  display: block;
+  margin-left: 0.6em;
+  width: 38px;
+  height: 22px;
+  background: white;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.togglebutton-wrapper .tooglebutton-box:before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  display: block;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #105ed3f1;
+  opacity: 0.7;
+  transition: all .2s ease-in-out;
+}
+
+.togglebutton-wrapper.togglebutton-focus .tooglebutton-box {
+  box-shadow: 0px 0px 0px 3px rgba(0, 0, 0, 0.1);
+}
+
+.togglebutton-wrapper.togglebutton-checked .tooglebutton-box:before {
+  left: calc(100% - 4px - 16px);
+  opacity: 1;
+}
+
+.actions {
+  display: flex;
+  gap: 10px
+}
+
+.labelWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.shortcutText,
+.shortcutUrl {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 230px;
+}
+
+.edit-btn,
+.delete-btn {
+  border-radius: 50%;
+  padding: 5px;
+  transition: all .32s ease;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  background-color: #105ed3f1;
+  color: white;
+}
+
+.btn-wrapper {
+  /* display: grid; */
+  /* grid-template-columns: 1fr 1fr 1fr 1fr 1fr; */
+  display: flex;
+  justify-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px auto;
+}
+
+.btnLink,
+.btnText,
+.btnForm,
+.btnCitation {
+  border: 1px solid rgba(255, 255, 255, .3);
+  background-color: #105fd3;
+  color: white;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.btnForm:hover,
+.btnText:hover,
+.btnForm:hover,
+.btnCitation:hover {
+  background-color: #105fd3;
+}
+
+label {
+  min-width: 100%;
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  color: black;
+}
+
+.saveText,
+.saveForms {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saveCitations {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.saveCitations>div {
+  display: flex;
+  gap: 10px;
+}
+
+.listItem {
+  display: flex;
+}
+
+.entryTitle {
+  font-weight: 600;
+  color: #333;
+}
+
+.entryData {
+  font-weight: 400;
+  color: #666;
+}
+
+.entry {
+  position: relative;
+  padding: 7px 0;
+}
+
+.entry::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 70px;
+  margin: auto;
+  border-bottom: 1px solid #19A7CE;
+}
+
+.entry:last-child::after {
+  display: none;
+}
+
+.listItem {
+  transition: all 0.3s ease-in-out;
+}
+
+.listItem:hover {
+  background: lightgrey;
+}
+
+.copyButton {
+  display: none;
+}
+
+.listItem:hover .copyButton {
+  display: block;
+}
+
+.buttonWrapper {
+  display: flex;
+  flex-direction: row;
+  margin-top: 23px;
 }

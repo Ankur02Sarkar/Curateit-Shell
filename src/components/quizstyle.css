@@ -1,109 +1,106 @@
- body {
-     /* background-color: #7cc6fe; */
-     /* display: flex; */
-     justify-content: center;
-     align-items: center;
-     min-height: 100vh;
-     color: white;
- }
+body {
+    /* background-color: #7cc6fe; */
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: white;
+}
 
- svg {
-     color: black;
- }
 
- .app {
-     background-color: #252d4a;
-     width: 500px;
-     min-height: 250px;
-     height: min-content;
-     border-radius: 15px;
-     padding: 20px;
-     box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
-     display: flex;
-     justify-content: space-evenly;
- }
+.app {
+    background-color: #252d4a;
+    width: 500px;
+    min-height: 250px;
+    height: min-content;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: space-evenly;
+}
 
- .score-section {
-     text-align: center;
-     display: flex;
-     flex-direction: column;
-     gap: 20px;
-     color: #fff;
-     margin: auto;
- }
+.score-section {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #fff;
+    margin: auto;
+}
 
- .question-section {
-     width: 100%;
-     position: relative;
-     color: #fff;
-     margin: auto;
- }
+.question-section {
+    width: 100%;
+    position: relative;
+    color: #fff;
+    margin: auto;
+}
 
- .question-count {
-     margin-bottom: 20px;
- }
+.question-count {
+    margin-bottom: 20px;
+}
 
- .question-count span {
-     font-size: 28px;
- }
+.question-count span {
+    font-size: 28px;
+}
 
- .question-text {
-     margin-bottom: 12px;
- }
+.question-text {
+    margin-bottom: 12px;
+}
 
- /* ANSWERS/RIGHT SECTION */
- .answer-section {
-     width: 100%;
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
- }
+/* ANSWERS/RIGHT SECTION */
+.answer-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
- .app button {
-     width: 100%;
-     font-size: 16px;
-     color: #ffffff;
-     background-color: #252d4a;
-     border-radius: 15px;
-     display: flex;
-     padding: 5px;
-     justify-content: flex-start;
-     align-items: center;
-     border: 5px solid #234668;
-     cursor: pointer;
- }
+.app button {
+    width: 100%;
+    font-size: 16px;
+    color: #ffffff;
+    background-color: #252d4a;
+    border-radius: 15px;
+    display: flex;
+    padding: 5px;
+    justify-content: flex-start;
+    align-items: center;
+    border: 5px solid #234668;
+    cursor: pointer;
+}
 
- .correct {
-     background-color: #2f922f !important;
- }
+.correct {
+    background-color: #2f922f !important;
+}
 
- .wrong {
-     background-color: red !important;
- }
+.wrong {
+    background-color: red !important;
+}
 
- .app button:hover {
-     background-color: #555e7d;
- }
+.app button:hover {
+    background-color: #555e7d;
+}
 
- .app button:focus {
-     outline: none;
- }
+.app button:focus {
+    outline: none;
+}
 
- .app button svg {
-     margin-right: 5px;
- }
+.app button svg {
+    margin-right: 5px;
+}
 
- .actions {
-     display: flex;
-     margin-top: 15px;
- }
+.actions {
+    display: flex;
+    margin-top: 15px;
+}
 
- .actions button {
-     background-color: #7cc6fe;
-     justify-content: center;
- }
+.actions button {
+    background-color: #7cc6fe;
+    justify-content: center;
+}
 
- .actions button:hover {
-     background-color: #234668;
-     color: white;
- }
+.actions button:hover {
+    background-color: #234668;
+    color: white;
+}

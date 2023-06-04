@@ -1,24 +1,41 @@
-@tailwind base;
+/* @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
+} */
+
+
+
+/* @layer base {
     html {
         font-family: 'Inter', sans-serif;
         scrollbar-color: #6969dd #e0e0e0;
         scrollbar-width: thin;
         overflow-x: hidden;
         /* height: 100%; */
-        height: auto;
-    }
+/* height: auto; */
+/* }
 
     body {
         margin: 0;
-        padding: 0;
-        /* width: 470px; */
-        /* height: 100%; */
-        /* height: auto; */
-        width: 470px;
+        padding: 0; */
+/* width: 470px; */
+/* height: 100%; */
+/* height: auto; */
+/* width: 470px;
         height: 100vh;
         transition: all 2ms ease-in-out;
     }
@@ -38,6 +55,19 @@
     ::-webkit-scrollbar-thumb {
         border-radius: 5px;
         background-color: #D1D5DB;
-    }
+    } */
 
+/* } */
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+        monospace;
 }
