@@ -1,0 +1,94 @@
+.radial-grad {
+  background-image: radial-gradient(circle at 50% 45%, rgb(120, 166, 236, 0.2) 10%, white);
+}
+
+div.ReactTags__tags {
+  position: relative;
+}
+
+/* Styles for the input */
+div.ReactTags__tagInput {
+  width: 100%;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+div.ReactTags__tagInput button.ReactTags__clearAll {
+  float: right;
+  color: blue;
+  text-decoration: underline;
+}
+
+div.ReactTags__tagInput input.ReactTags__tagInputField,
+div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+  height: 31px;
+  margin: 0;
+  font-size: 12px;
+  width: 100%;
+  /* border: 1px solid #eee; */
+  padding: 0 4px;
+  outline: none;
+}
+
+/* Styles for selected tags */
+div.ReactTags__selected span.ReactTags__tag {
+  border: 1px solid #ddd;
+  background: #95b9f017;
+  font-size: 13px;
+  display: inline-block;
+  cursor: default !important;
+  padding: 3px 5px;
+  margin: 2px;
+  border-radius: 2px;
+}
+
+div.ReactTags__selected button.ReactTags__remove {
+  color: #9c9c9c;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+/* Styles for suggestions */
+div.ReactTags__suggestions {
+  position: absolute;
+  color: #000 !important;
+  font-weight: normal !important;
+  font-size: 14px !important;
+  min-height: 50px;
+  max-height: 200px;
+  width: 100%;
+  overflow-y: scroll;
+  border: 1px solid #eee;
+  z-index: 99999999999999999 !important;
+  background-color: white !important;
+}
+
+div.ReactTags__suggestions ul {
+  list-style-type: none;
+  box-shadow: .05em .01em .5em rgba(0, 0, 0, .2);
+  background: white;
+  z-index: 99999999999999999 !important;
+  width: 100%;
+}
+
+div.ReactTags__suggestions li {
+  border-bottom: 1px solid #ddd;
+  z-index: 99999999999999999 !important;
+  padding: 10px 5px;
+  margin: 0;
+  width: 100%;
+}
+
+div.ReactTags__suggestions li mark {
+  text-decoration: underline;
+  background: none;
+  font-weight: 600;
+  z-index: 99999999999999999 !important;
+}
+
+div.ReactTags__suggestions ul li.ReactTags__activeSuggestion {
+  background: #b7cfe0;
+  cursor: pointer;
+  width: 100%;
+  z-index: 99999999999999999 !important;
+}

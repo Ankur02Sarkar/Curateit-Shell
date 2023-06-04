@@ -1,0 +1,51 @@
+.main-footer {
+    width: 430px;
+}
+
+.arrow-icon {
+    width: 25px;
+    height: 25px;
+    margin-right: 10px;
+    animation: rotation 2s infinite linear;
+}
+
+.footer-container {
+    height: 12px;
+    padding-top: 6px;
+    padding-bottom: 45px;
+}
+
+.footer-btn-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.footer-btns {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 50%;
+    align-items: center;
+}
+
+.layout-loader-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.fit-image {
+    object-fit: scale-down;
+}
+
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+}

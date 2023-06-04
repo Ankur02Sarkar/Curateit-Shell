@@ -1,0 +1,90 @@
+{
+  "short_name": "Curatit shell",
+  "name": "Curateit shell",
+  "description": "Introducing CurateIt - the ultimate all-in-one Chrome extension for organizing and saving your favorites.",
+  "icons": {
+    "16": "icons/logo192.png",
+    "48": "icons/logo192.png",
+    "128": "icons/logo192.png"
+  },
+  "permissions": [
+    "<all_urls>",
+    "activeTab",
+    "tabs",
+    "storage",
+    "scripting",
+    "unlimitedStorage",
+    "contextMenus",
+    "scripting",
+    "history",
+    "search",
+    "browsingData",
+    "cookies",
+    "externally_connectable",
+    "declarativeContent",
+    "nativeMessaging",
+    "cookies"
+  ],
+  "version": "2.1.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "./scripts/background.js"
+  },
+  "action": {},
+  "content_scripts": [
+    {
+      "all_frames": true,
+      "matches": [ "https://development-api.curateit.com/*/*", "https://api.curateit.com/*/*" ],
+      "css": ["./scripts/theme.css"],
+      "js": [
+        "./scripts/popup.js"
+      ]
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["./scripts/side-panel.js"],
+      "css": ["./scripts/main.css"]
+    },
+    {
+      "all_frames": true,
+      "matches": [
+          "https://twitter.com/*",
+          "https://mobile.twitter.com/*",
+          "https://twitter.com/i/bookmarks",
+          "https://development-api.curateit.com/*",
+          "https://api.curateit.com/*"
+      ],
+      "js": [
+        "./scripts/jquery.min.js",
+        "./scripts/twitter-import/twitterImport.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src * data:; connect-src *; navigate-to 'self' https://darkreader.org/* https://github.com/darkreader/darkreader/blob/main/CONTRIBUTING.md https://github.com/darkreader/darkreader https://opencollective.com/darkreader/donate https://twitter.com/darkreaderapp; child-src 'none'; worker-src 'none'; object-src 'none'; font-src 'self' https://fonts.gstatic.com; frame-src 'self'"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "index.html",
+        "icons/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "host_permissions": [
+        "https://twitter.com/*",
+        "https://mobile.twitter.com/*",
+        "https://development-api.curateit.com/*",
+        "https://api.curateit.com/*",
+        "https://api.twitter.com/*",
+        "https://twitter.com/i/bookmarks",
+        "https://twitter.com/*/likes"
+    ],
+  "externally_connectable": {
+    "matches": [
+      "<all_urls>"
+    ]
+  }
+}

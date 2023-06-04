@@ -1,0 +1,8 @@
+.header-menu {
+    z-index: 99999 !important;
+}
+
+.close-btn {
+    width: 25px;
+    height: 25px;
+}
