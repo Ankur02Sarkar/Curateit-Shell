@@ -16,18 +16,18 @@ function App() {
   const [isProcessComplete, setIsProcessComplete] = useState(false);
   const userData = useSelector((state) => state.user.userData);
 
-  // useEffect(() => {
-  //   console.log(session.token);
-  //   if (session.token) {
-  //     navigate("/");
-  //   } else {
-  //     navigate("/login");
-  //   }
-  //   window.addEventListener("message", onMessageReceived);
-  //   return () => {
-  //     window.removeEventListener("message", onMessageReceived);
-  //   };
-  // }, []);
+  useEffect(() => {
+    console.log(session.token);
+    if (session.token) {
+      navigate("/");
+    } else {
+      navigate("/login");
+    }
+    window.addEventListener("message", onMessageReceived);
+    return () => {
+      window.removeEventListener("message", onMessageReceived);
+    };
+  }, []);
 
   const onMessageReceived = async (e) => {
     const { data } = e;
@@ -42,7 +42,7 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/login" element={<Home />} />
+      <Route path="/login" element={<Login />} />
       <Route path="/" element={<Home />} />
       <Route path="/add-import-details" element={<AddImportDetails />} />
     </Routes>
