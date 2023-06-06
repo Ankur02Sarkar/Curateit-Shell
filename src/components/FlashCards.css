@@ -125,4 +125,5 @@ label:hover :checked+.flip-card {
 	display: flex;
 	flex-direction: column;
 	gap: 23px;
+	overflow: hidden;
 }

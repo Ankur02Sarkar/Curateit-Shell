@@ -10,7 +10,7 @@ body {
 
 .app {
     background-color: #252d4a;
-    width: 500px;
+    width: auto;
     min-height: 250px;
     height: min-content;
     border-radius: 15px;
@@ -58,7 +58,7 @@ body {
 
 .app button {
     width: 100%;
-    font-size: 16px;
+    font-size: 12px;
     color: #ffffff;
     background-color: #252d4a;
     border-radius: 15px;

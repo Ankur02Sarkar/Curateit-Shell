@@ -12,7 +12,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const FlashCards = () => {
+const QuizComp = () => {
   const [transcript, setTranscript] = useState("");
   const [quizData, setQuizData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -381,29 +381,22 @@ const FlashCards = () => {
     <div className="flashCardsWrapper">
       {isYoutube === "" ? <button onClick={checkYoutube}>Start</button> : null}
 
-      <button onClick={savePdf} style={{ margin: "auto" }}>
-        Save as PDF
-      </button>
+      <button onClick={savePdf}>Save as PDF</button>
 
       {isYoutube === "Yes" && (
         <>
           <input
             type="number"
-            style={{ margin: "auto" }}
             id="textExtractionInput"
             onChange={(e) => setInputNumber(e.target.value)}
-            placeholder="Number of Flashcards"
+            placeholder="Number of Questions"
           />
-          <button
-            onClick={createQuestionAnswers}
-            disabled={loading}
-            style={{ margin: "auto" }}
-          >
+          <button onClick={createQuestionAnswers} disabled={loading}>
             {loading && hasGeneratedFlashCards
-              ? "Generating More Flashcards..."
+              ? "Generating More Questions..."
               : hasGeneratedFlashCards
-              ? "Generate More Flashcards"
-              : "Generate Flashcards"}
+              ? "Generate More Questions"
+              : "Generate Questions"}
           </button>
         </>
       )}
@@ -411,16 +404,11 @@ const FlashCards = () => {
         <>
           <input
             type="number"
-            style={{ margin: "auto" }}
             id="textExtractionInput"
             onChange={(e) => setInputNumber(e.target.value)}
-            placeholder="Number of Flashcards"
+            placeholder="Number of Questions"
           />
-          <button
-            onClick={handleTextExtraction}
-            disabled={loading}
-            style={{ margin: "auto" }}
-          >
+          <button onClick={handleTextExtraction} disabled={loading}>
             {loading && hasExtractedText
               ? "Extracting More Text..."
               : hasExtractedText
@@ -429,35 +417,19 @@ const FlashCards = () => {
           </button>
         </>
       )}
-      {loading && <h3>Creating Flashcards...</h3>}
+      {loading && <h3>Creating Questions...</h3>}
       {endOfResult && <h3>No more Content</h3>}
-      {quizData && (
-        <div id="quiz-data" className="flashCards">
-          {quizData.map((item, index) => (
-            <label key={index}>
-              <input type="checkbox" />
-              <div className="flip-card">
-                <div className="front">
-                  <h1>Question</h1>
-                  <hr />
-                  <p>{item.question}</p>
-                  <hr />
-                  <p className="click">Show Answer</p>
-                </div>
-                <div className="back">
-                  <h1>Answer</h1>
-                  <hr />
-                  <p>{item.answer}</p>
-                  <hr />
-                  <p className="click">Show Question</p>
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
+      {/* {quizData && <Quiz questions={quizData} />} */}
+      {console.log("before passing quizdata to comp : ", quizData)}
+
+      {quizData.length > 0 && (
+        <>
+          {console.log("passing quizdata to comp : ", quizData)}
+          <Quiz questions={quizData} />
+        </>
       )}
     </div>
   );
 };
 
-export default FlashCards;
+export default QuizComp;

@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { MdQuiz } from "react-icons/md";
 import { BsCardText } from "react-icons/bs";
 import FlashCards from "../components/FlashCards";
+import QuizComp from "../components/QuizComp";
+
 const Home = () => {
   const [showComp, setShowComp] = useState("");
   const navigate = useNavigate();
@@ -21,9 +23,10 @@ const Home = () => {
     });
     navigate("/login");
   };
+
   return (
-    <div className="flex justify-around items-center h-[100vh] w-full bg-slate-50">
-      <div className="flex gap-[27px]">
+    <div className="justify-around items-center h-[100vh] w-full bg-slate-50 grid">
+      <div className="flex gap-[27px] justify-center">
         <button>
           <MdQuiz size={50} onClick={() => setShowComp("Quiz")} />
         </button>
@@ -32,7 +35,7 @@ const Home = () => {
         </button>
       </div>
 
-      {showComp === "Quiz" ? <h1>Quiz</h1> : null}
+      {showComp === "Quiz" ? <QuizComp /> : null}
       {showComp === "FlashCards" ? <FlashCards /> : null}
 
       <button
