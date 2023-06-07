@@ -1,3 +1,4 @@
-fastapi==0.95.2
+fastapi==0.96.0
+goose3==3.1.14
 youtube_transcript_api==0.6.0
 uvicorn==0.22.0

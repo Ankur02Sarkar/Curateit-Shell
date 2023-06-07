@@ -114,7 +114,7 @@ const QuizComp = () => {
       console.log("YouTube video ID: ", videoId);
 
       const response = await fetch(
-        `http://localhost:8000/transcript/${videoId}/${currentIndexFlashCards}/${
+        `${baseUrl}/transcript/${videoId}/${currentIndexFlashCards}/${
           currentIndexFlashCards + 8000
         }`
       );
@@ -252,7 +252,7 @@ const QuizComp = () => {
       console.log("Encoded URL : ", encodedUrl);
 
       const response = await fetch(
-        `http://localhost:8000/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
+        `${baseUrl}/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
           currentIndexTextExtraction + 8000
         }`
       );
