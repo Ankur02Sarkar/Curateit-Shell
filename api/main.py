@@ -9,7 +9,6 @@ from pydantic import BaseModel
 
 openai.api_key =  "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"
 
-
 class Item(BaseModel):
     text: str
 
@@ -63,4 +62,3 @@ async def ask_query(item: Item):
     )
     print("ans in api :: ", answer["choices"][0]["message"]["content"])
     return {"message": answer["choices"][0]["message"]["content"]}
- 
