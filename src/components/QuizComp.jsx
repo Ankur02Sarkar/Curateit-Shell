@@ -182,7 +182,7 @@ const QuizComp = () => {
                 }
               ]
             )
-
+ 
             Remember that the JSON Format should be STRICTLY like the one given above and not some different format. 
             `,
           },
@@ -191,41 +191,6 @@ const QuizComp = () => {
 
       let result = completion.data.choices[0].message.content.trim();
       console.log("openai res : \n", result);
-      // result = `(
-      //   [
-      //         {
-      //           "question": "What is the capital of India?",
-      //           "answer": "Delhi is the Capital of India",
-      //           "answerOptions": [
-      //             { "answerText": "Delhi", "isCorrect": true },
-      //             { "answerText": "Pune", "isCorrect": false },
-      //             { "answerText": "Ranchi", "isCorrect": false },
-      //             { "answerText": "Patna", "isCorrect": false },
-      //           ],
-      //         },
-      //         {
-      //           "question": "Who is the Prime Minister of China?",
-      //           "answer": "Beijing is the Prime Minister of China",
-      //           "answerOptions": [
-      //             { "answerText": "Fumio Kishida", "isCorrect": true },
-      //             { "answerText": "Modi", "isCorrect": false },
-      //             { "answerText": "Trump", "isCorrect": false },
-      //             { "answerText": "Obama", "isCorrect": false },
-      //           ],
-      //         },
-      //         {
-      //           "question": "What is 1 + 1?",
-      //           "answer": "1 + 1 is 2",
-      //           "answerOptions": [
-      //             { "answerText": "2", "isCorrect": true },
-      //             { "answerText": "3", "isCorrect": false },
-      //             { "answerText": "7", "isCorrect": false },
-      //             { "answerText": "12", "isCorrect": false },
-      //           ],
-      //         },
-      //   ]
-      //   )`;
-      // console.log("openai res MODIFIED : \n", result);
 
       const jsonResult = extractJSON(result);
       console.log("res is : ", jsonResult);
@@ -329,42 +294,6 @@ const QuizComp = () => {
 
       let result = completion.data.choices[0].message.content.trim();
       console.log("openai res : \n", result);
-      // result = `
-      //   [
-      //       {
-      //         "question": "What is the capital of India?",
-      //         "answer": "Delhi is the Capital of India",
-      //         "answerOptions": [
-      //           { "answerText": "Delhi", "isCorrect": true },
-      //           { "answerText": "Pune", "isCorrect": false },
-      //           { "answerText": "Ranchi", "isCorrect": false },
-      //           { "answerText": "Patna", "isCorrect": false }
-      //         ]
-      //       },
-      //       {
-      //         "question": "Who is the Prime Minister of China?",
-      //         "answer": "Beijing is the Prime Minister of China",
-      //         "answerOptions": [
-      //           { "answerText": "Fumio Kishida", "isCorrect": true },
-      //           { "answerText": "Modi", "isCorrect": false },
-      //           { "answerText": "Trump", "isCorrect": false },
-      //           { "answerText": "Obama", "isCorrect": false }
-      //         ]
-      //       },
-      //       {
-      //         "question": "What is 1 + 1?",
-      //         "answer": "1 + 1 is 2",
-      //         "answerOptions": [
-      //           { "answerText": "2", "isCorrect": true },
-      //           { "answerText": "3", "isCorrect": false },
-      //           { "answerText": "7", "isCorrect": false },
-      //           { "answerText": "12", "isCorrect": false }
-      //         ]
-      //       }
-      //   ]
-      //   `;
-
-      // console.log("openai res MODIFIED : \n", result);
 
       const jsonResult = extractJSON(result);
 
