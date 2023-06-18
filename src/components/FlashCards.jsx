@@ -197,14 +197,59 @@ const FlashCards = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ text: "This is a question" }),
+        body: JSON.stringify({
+          text: `Create ${inputNumber} short questions and answers based on the following context. Remember that the
+        answers must be within the context. The Context is :-
+
+        ${data.transcription}
+
+        Your response should strictly be JSON data of the following
+        format :-
+        (
+          [
+            {
+              "question": "What is the capital of India?",
+              "answer": "Delhi is the Capital of India",
+              "answerOptions": [
+                { "answerText": "Delhi", "isCorrect": true },
+                { "answerText": "Pune", "isCorrect": false },
+                { "answerText": "Ranchi", "isCorrect": false },
+                { "answerText": "Patna", "isCorrect": false }
+              ]
+            },
+            {
+              "question": "Who is the Prime Minister of China?",
+              "answer": "Beijing is the Prime Minister of China",
+              "answerOptions": [
+                { "answerText": "Fumio Kishida", "isCorrect": true },
+                { "answerText": "Modi", "isCorrect": false },
+                { "answerText": "Trump", "isCorrect": false },
+                { "answerText": "Obama", "isCorrect": false }
+              ]
+            },
+            {
+              "question": "What is 1 + 1?",
+              "answer": "1 + 1 is 2",
+              "answerOptions": [
+                { "answerText": "2", "isCorrect": true },
+                { "answerText": "3", "isCorrect": false },
+                { "answerText": "7", "isCorrect": false },
+                { "answerText": "12", "isCorrect": false }
+              ]
+            }
+          ]
+        )
+
+        Remember that the JSON Format should be STRICTLY like the one given above and not some different format.
+        `,
+        }),
       });
 
       const result = await resp.json();
 
       console.log("res from ask query :: ", result.message);
 
-      const jsonResult = extractJSON(result);
+      const jsonResult = extractJSON(result.message);
       console.log("res is : ", jsonResult);
       const parsedResult = JSON.parse(jsonResult);
       console.log("parsed res is : ", parsedResult);

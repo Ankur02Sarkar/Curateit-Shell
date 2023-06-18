@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import unquote
 from goose3 import Goose
+
+import openai
 from pydantic import BaseModel
+
+openai.api_key =  "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"
+
 
 class Item(BaseModel):
     text: str
@@ -50,4 +55,12 @@ def extract_article(url: str, start_index: int, end_index: int):
 @app.post("/ask_query/")
 async def ask_query(item: Item):
     print(item.text)
-    return {"message": "Done"}
+    answer = openai.ChatCompletion.create(
+        model = "gpt-4",
+        messages=[
+            { "role" : "user" , "content" : item.text}
+        ]
+    )
+    print("ans in api :: ", answer["choices"][0]["message"]["content"])
+    return {"message": answer["choices"][0]["message"]["content"]}
+ 
