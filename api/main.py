@@ -3,6 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import unquote
 from goose3 import Goose
+from pydantic import BaseModel
+
+class Item(BaseModel):
+    text: str
 
 app = FastAPI()
 
@@ -43,3 +47,7 @@ def extract_article(url: str, start_index: int, end_index: int):
     except Exception as e:
         return {"error": str(e)}
 
+@app.post("/ask_query/")
+async def ask_query(item: Item):
+    print(item.text)
+    return {"message": "Done"}
