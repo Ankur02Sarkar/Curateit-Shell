@@ -55,7 +55,7 @@ def extract_article(url: str, start_index: int, end_index: int):
 async def ask_query(item: Item):
     print(item.text)
     answer = openai.ChatCompletion.create(
-        model = "gpt-4",
+        model = "gpt-3.5-turbo",
         messages=[
             { "role" : "user" , "content" : item.text}
         ]

@@ -137,7 +137,7 @@ const QuizComp = () => {
         return;
       }
 
-      const resp = await fetch("http://localhost:8000/ask_query/", {
+      const resp = await fetch(`${baseUrl}/ask_query/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -242,7 +242,7 @@ const QuizComp = () => {
         setEndOfResult(true);
         return;
       }
-      const resp = await fetch("http://localhost:8000/ask_query/", {
+      const resp = await fetch(`${baseUrl}/ask_query/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
