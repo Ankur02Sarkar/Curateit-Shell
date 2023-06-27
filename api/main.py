@@ -51,21 +51,66 @@ def extract_article(url: str, start_index: int, end_index: int):
     except Exception as e:
         return {"error": str(e)}
 
-@app.post("/ask_query/")
-async def ask_query(item: Item):
-    print(item.text)
+@app.post("/create_mcq/")
+async def create_mcq(item: Item):
     answer = openai.ChatCompletion.create(
-        model = "gpt-4",
+        model = "gpt-3.5-turbo-0613",
         messages=[
+            {
+                "role": "system",
+                "content": "You are a Teacher whose job is to create questions and answers based on a context",
+            },
             { "role" : "user" , "content" : item.text}
-        ]
+        ],
+        functions=[
+            {
+                "name": "create_mcq",
+                "description": "Create n number of Multiple Choice Questions and Answers according to the context",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "qna": {
+                            "type": "object",
+                            "description": "An array of MCQ questions and answers",
+                            "properties": {
+                                "question": {
+                                    "type": "string",
+                                    "description": "The Question created",
+                                },
+                                "answerOptions": {
+                                    "type": "object",
+                                    "description": "An array of different options among which only one answer is correct",
+                                    "properties": {
+                                        "answerText": {
+                                            "type": "string",
+                                            "description": "The Current Answer, this might be correct or wrong",
+                                        },
+                                        "isCorrect": {
+                                            "type": "boolean",
+                                            "description": "Tells if the current option is correct or not",
+                                        },
+                                    },
+                                    "required": ["answerText", "isCorrect"],
+                                },
+                            },
+                            "required": ["question", "answerOptions"],
+                        },
+                    },
+                    "required": ["qna"],
+                },
+            }
+        ],
+        function_call="auto",
     )
-    print("ans in api :: ", answer["choices"][0]["message"]["content"])
-    return {"message": answer["choices"][0]["message"]["content"]}
+    # Load arguments string into a JSON object
+    arguments_json = json.loads(
+        answer["choices"][0]["message"]["function_call"]["arguments"]
+    )
+    print("ans in api :: ", json.dumps(arguments_json["qna"], indent=2))
+    return {"message": arguments_json["qna"]}
 
 @app.post("/create_flashcards/")
 async def create_flashcards(item: Item):
-    print(item)
     answer = openai.ChatCompletion.create(
         model = "gpt-3.5-turbo-0613",
         messages=[
