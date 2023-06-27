@@ -3,7 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from youtube_transcript_api import YouTubeTranscriptApi
 from urllib.parse import unquote
 from goose3 import Goose
-
+import json
 import openai
 from pydantic import BaseModel
 
@@ -62,3 +62,51 @@ async def ask_query(item: Item):
     )
     print("ans in api :: ", answer["choices"][0]["message"]["content"])
     return {"message": answer["choices"][0]["message"]["content"]}
+
+@app.post("/create_flashcards/")
+async def create_flashcards(item: Item):
+    print(item)
+    answer = openai.ChatCompletion.create(
+        model = "gpt-3.5-turbo-0613",
+        messages=[
+            {
+                "role": "system",
+                "content": "You are a Teacher whose job is to create questions and answers based on a context",
+            },
+            { "role" : "user" , "content" : item.text}
+        ],
+        functions=[
+            {
+                "name": "create_flashcards",
+                "description": "Create n number of Flashcards question and answers based on a context",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "qna": {
+                            "type": "object",
+                            "description": "An array of questions and answers",
+                            "properties": {
+                                "question": {
+                                    "type": "string",
+                                    "description": "The Question created",
+                                },
+                                "answer": {
+                                    "type": "string",
+                                    "description": "The Answer for the current question",
+                                },
+                            },
+                            "required": ["question", "answer"],
+                        },
+                    },
+                    "required": ["qna"],
+                },
+            },
+        ],
+        function_call="auto",
+    )
+    # Load arguments string into a JSON object
+    arguments_json = json.loads(
+        answer["choices"][0]["message"]["function_call"]["arguments"]
+    )
+    print("ans in api :: ", json.dumps(arguments_json["qna"], indent=2))
+    return {"message": arguments_json["qna"]}

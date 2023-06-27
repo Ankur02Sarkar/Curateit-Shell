@@ -1,5 +1,5 @@
-import openai
 import time
+import openai
 import json
 
 openai.api_key = "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"

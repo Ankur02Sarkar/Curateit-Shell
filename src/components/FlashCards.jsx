@@ -242,67 +242,24 @@ const FlashCards = () => {
         return;
       }
 
-      const resp = await fetch(`${baseUrl}/ask_query/`, {
+      const resp = await fetch(`${baseUrl}/create_flashcards/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: `Create ${inputNumber} short questions and answers based on the following context. Remember that the 
-          answers must be within the context. The Context is :-
-
-          ${data.text}
-          
-          Your response should strictly be JSON data of the following 
-          format :-
-          (
-            [
-              {
-                "question": "What is the capital of India?",
-                "answer": "Delhi is the Capital of India",
-                "answerOptions": [
-                  { "answerText": "Delhi", "isCorrect": true },
-                  { "answerText": "Pune", "isCorrect": false },
-                  { "answerText": "Ranchi", "isCorrect": false },
-                  { "answerText": "Patna", "isCorrect": false }
-                ]
-              },
-              {
-                "question": "Who is the Prime Minister of China?",
-                "answer": "Beijing is the Prime Minister of China",
-                "answerOptions": [
-                  { "answerText": "Fumio Kishida", "isCorrect": true },
-                  { "answerText": "Modi", "isCorrect": false },
-                  { "answerText": "Trump", "isCorrect": false },
-                  { "answerText": "Obama", "isCorrect": false }
-                ]
-              },
-              {
-                "question": "What is 1 + 1?",
-                "answer": "1 + 1 is 2",
-                "answerOptions": [
-                  { "answerText": "2", "isCorrect": true },
-                  { "answerText": "3", "isCorrect": false },
-                  { "answerText": "7", "isCorrect": false },
-                  { "answerText": "12", "isCorrect": false }
-                ]
-              }
-            ]
-          )
-
-          Remember that the JSON Format should be STRICTLY like the one given above and not some different format. 
+          text: `Create ${inputNumber} question and answer based on the following context :- 
+            ${data.text}
           `,
         }),
       });
 
       let result = await resp.json();
 
-      console.log("res from ask query :: ", result.message);
-
-      const jsonResult = extractJSON(result.message);
-
-      const parsedResult = JSON.parse(jsonResult);
-      console.log("parsed result : ", parsedResult);
+      console.log("res from flashcards api :: ", result.message);
+      // const jsonResult = result.message;
+      const parsedResult = result.message;
+      console.log("parsed flashcards res : ", parsedResult);
       setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
       setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
       setLoading(false);
