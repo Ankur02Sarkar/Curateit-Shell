@@ -124,7 +124,7 @@ const FlashCards = () => {
 
           fetch(
             `${baseUrl}/transcript/${videoId}/${currentIndexFlashCards}/${
-              currentIndexFlashCards + 8000
+              currentIndexFlashCards + 3000
             }`
           ).then((response) => {
             clearTimeout(timer);
@@ -138,10 +138,10 @@ const FlashCards = () => {
 
         const data = await response.json();
 
-        if (currentIndexFlashCards + 8000 >= data.transcription.length) {
+        if (currentIndexFlashCards + 3000 >= data.transcription.length) {
           setCurrentIndexFlashCards(0); // Reset index to 0 if we've reached the end
         } else {
-          setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
+          setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
         }
 
         setTranscript(data.transcription);
@@ -154,7 +154,7 @@ const FlashCards = () => {
           return;
         }
 
-        const resp = await fetch(`${baseUrl}/create_flashcards/`, {
+        const resp = await fetch(`${baseUrl}/ask_query/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -171,7 +171,7 @@ const FlashCards = () => {
         const parsedResult = result.message;
         console.log("parsed flashcards res : ", parsedResult);
         setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-        setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
+        setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
       } catch (error) {
         console.error("error : ", error);
         setTranscriptError(true);
@@ -202,7 +202,7 @@ const FlashCards = () => {
 
           fetch(
             `${baseUrl}/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
-              currentIndexTextExtraction + 8000
+              currentIndexTextExtraction + 3000
             }`
           ).then((response) => {
             clearTimeout(timer);
@@ -216,10 +216,10 @@ const FlashCards = () => {
 
         const data = await response.json();
 
-        if (currentIndexTextExtraction + 8000 >= data.text.length) {
+        if (currentIndexTextExtraction + 3000 >= data.text.length) {
           setCurrentIndexTextExtraction(0); // Reset index to 0 if we've reached the end
         } else {
-          setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
+          setCurrentIndexTextExtraction(currentIndexTextExtraction + 3000);
         }
 
         setText(data.text);
@@ -232,7 +232,7 @@ const FlashCards = () => {
           return;
         }
 
-        const resp = await fetch(`${baseUrl}/create_flashcards/`, {
+        const resp = await fetch(`${baseUrl}/ask_query/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -250,7 +250,7 @@ const FlashCards = () => {
         const parsedResult = result.message;
         console.log("parsed flashcards res : ", parsedResult);
         setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-        setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
+        setCurrentIndexTextExtraction(currentIndexTextExtraction + 3000);
       } catch (error) {
         console.error(error);
         setTranscriptError(true);
@@ -265,19 +265,8 @@ const FlashCards = () => {
     <div className="flashCardsWrapper">
       {isYoutube === "" ? <button onClick={checkYoutube}>Start</button> : null}
 
-      <button onClick={savePdf} style={{ margin: "auto" }}>
-        Save as PDF
-      </button>
-
       {isYoutube === "Yes" && (
         <>
-          {/* <input
-            type="number"
-            style={{ margin: "auto" }}
-            id="textExtractionInput"
-            onChange={(e) => setInputNumber(e.target.value)}
-            placeholder="Number of Flashcards"
-          /> */}
           <button
             onClick={createQuestionAnswers}
             disabled={loading}
@@ -293,13 +282,6 @@ const FlashCards = () => {
       )}
       {isYoutube === "No" && (
         <>
-          {/* <input
-            type="number"
-            style={{ margin: "auto" }}
-            id="textExtractionInput"
-            onChange={(e) => setInputNumber(e.target.value)}
-            placeholder="Number of Flashcards"
-          /> */}
           <button
             onClick={handleTextExtraction}
             disabled={loading}
@@ -316,34 +298,37 @@ const FlashCards = () => {
       {loading && <h3 style={{ color: "black" }}>Creating Flashcards...</h3>}
       {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
       {transcriptError && (
-        <h3 style={{ color: "black" }}>
-          Could not fetch transcriptions for the current video
-        </h3>
+        <h3 style={{ color: "black" }}>Some error occured</h3>
       )}
       {quizData && (
-        <div id="quiz-data" className="flashCards">
-          {quizData.map((item, index) => (
-            <label key={index}>
-              <input type="checkbox" />
-              <div className="flip-card">
-                <div className="front">
-                  <h1>Question</h1>
-                  <hr />
-                  <p>{item.question}</p>
-                  <hr />
-                  <p className="click">Show Answer</p>
+        <>
+          <div id="quiz-data" className="flashCards">
+            {quizData.map((item, index) => (
+              <label key={index}>
+                <input type="checkbox" />
+                <div className="flip-card">
+                  <div className="front">
+                    <h1>Question</h1>
+                    <hr />
+                    <p>{item.question}</p>
+                    <hr />
+                    <p className="click">Show Answer</p>
+                  </div>
+                  <div className="back">
+                    <h1>Answer</h1>
+                    <hr />
+                    <p>{item.answer}</p>
+                    <hr />
+                    <p className="click">Show Question</p>
+                  </div>
                 </div>
-                <div className="back">
-                  <h1>Answer</h1>
-                  <hr />
-                  <p>{item.answer}</p>
-                  <hr />
-                  <p className="click">Show Question</p>
-                </div>
-              </div>
-            </label>
-          ))}
-        </div>
+              </label>
+            ))}
+          </div>
+          <button onClick={savePdf} style={{ margin: "auto" }}>
+            Save as PDF
+          </button>
+        </>
       )}
     </div>
   );

@@ -6,8 +6,14 @@ from goose3 import Goose
 import json
 import openai
 from pydantic import BaseModel
+import os
+from dotenv import load_dotenv
+from pathlib import Path
 
-openai.api_key =  "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"
+env_path = Path('..') / '.env'
+load_dotenv(dotenv_path=env_path)
+
+openai.api_key = os.getenv('REACT_APP_OPENAI_API_KEY')
 
 class Item(BaseModel):
     text: str
@@ -51,8 +57,8 @@ def extract_article(url: str, start_index: int, end_index: int):
     except Exception as e:
         return {"error": str(e)}
 
-@app.post("/create_mcq/")
-async def create_mcq(item: Item):
+@app.post("/ask_query/")
+async def ask_query(item: Item):
     answer = openai.ChatCompletion.create(
         model = "gpt-3.5-turbo-0613",
         messages=[
@@ -64,7 +70,7 @@ async def create_mcq(item: Item):
         ],
         functions=[
             {
-                "name": "create_mcq",
+                "name": "ask_query",
                 "description": "Create n number of Multiple Choice Questions and Answers according to the context",
                 "parameters": {
                     "type": "object",
@@ -76,6 +82,10 @@ async def create_mcq(item: Item):
                                 "question": {
                                     "type": "string",
                                     "description": "The Question created",
+                                },
+                                "answer": {
+                                    "type": "string",
+                                    "description": "The Answer for the current question",
                                 },
                                 "answerOptions": {
                                     "type": "object",
@@ -93,7 +103,7 @@ async def create_mcq(item: Item):
                                     "required": ["answerText", "isCorrect"],
                                 },
                             },
-                            "required": ["question", "answerOptions"],
+                            "required": ["question", "answer", "answerOptions"],
                         },
                     },
                     "required": ["qna"],
@@ -102,54 +112,6 @@ async def create_mcq(item: Item):
         ],
         function_call="auto",
     )
-    # Load arguments string into a JSON object
-    arguments_json = json.loads(
-        answer["choices"][0]["message"]["function_call"]["arguments"]
-    )
-    print("ans in api :: ", json.dumps(arguments_json["qna"], indent=2))
-    return {"message": arguments_json["qna"]}
-
-@app.post("/create_flashcards/")
-async def create_flashcards(item: Item):
-    answer = openai.ChatCompletion.create(
-        model = "gpt-3.5-turbo-0613",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a Teacher whose job is to create questions and answers based on a context",
-            },
-            { "role" : "user" , "content" : item.text}
-        ],
-        functions=[
-            {
-                "name": "create_flashcards",
-                "description": "Create n number of Flashcards question and answers based on a context",
-                "parameters": {
-                    "type": "object",
-                    "properties": {
-                        "qna": {
-                            "type": "object",
-                            "description": "An array of questions and answers",
-                            "properties": {
-                                "question": {
-                                    "type": "string",
-                                    "description": "The Question created",
-                                },
-                                "answer": {
-                                    "type": "string",
-                                    "description": "The Answer for the current question",
-                                },
-                            },
-                            "required": ["question", "answer"],
-                        },
-                    },
-                    "required": ["qna"],
-                },
-            },
-        ],
-        function_call="auto",
-    )
-    # Load arguments string into a JSON object
     arguments_json = json.loads(
         answer["choices"][0]["message"]["function_call"]["arguments"]
     )

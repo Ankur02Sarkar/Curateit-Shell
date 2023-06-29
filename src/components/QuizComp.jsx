@@ -124,7 +124,7 @@ const QuizComp = () => {
 
           fetch(
             `${baseUrl}/transcript/${videoId}/${currentIndexFlashCards}/${
-              currentIndexFlashCards + 8000
+              currentIndexFlashCards + 3000
             }`
           ).then((response) => {
             clearTimeout(timer);
@@ -138,10 +138,10 @@ const QuizComp = () => {
 
         const data = await response.json();
 
-        if (currentIndexFlashCards + 8000 >= data.transcription.length) {
+        if (currentIndexFlashCards + 3000 >= data.transcription.length) {
           setCurrentIndexFlashCards(0); // Reset index to 0 if we've reached the end
         } else {
-          setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
+          setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
         }
 
         setTranscript(data.transcription);
@@ -154,7 +154,7 @@ const QuizComp = () => {
           return;
         }
 
-        const resp = await fetch(`${baseUrl}/create_mcq/`, {
+        const resp = await fetch(`${baseUrl}/ask_query/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -170,7 +170,7 @@ const QuizComp = () => {
         const parsedResult = result.message;
         console.log("parsed mcq res : ", parsedResult);
         setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-        setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
+        setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
       } catch (error) {
         console.error("error : ", error);
         setTranscriptError(true);
@@ -201,7 +201,7 @@ const QuizComp = () => {
 
           fetch(
             `${baseUrl}/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
-              currentIndexTextExtraction + 8000
+              currentIndexTextExtraction + 3000
             }`
           ).then((response) => {
             clearTimeout(timer);
@@ -215,10 +215,10 @@ const QuizComp = () => {
 
         const data = await response.json();
 
-        if (currentIndexTextExtraction + 8000 >= data.text.length) {
+        if (currentIndexTextExtraction + 3000 >= data.text.length) {
           setCurrentIndexTextExtraction(0); // Reset index to 0 if we've reached the end
         } else {
-          setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
+          setCurrentIndexTextExtraction(currentIndexTextExtraction + 3000);
         }
 
         setText(data.text);
@@ -231,7 +231,7 @@ const QuizComp = () => {
           return;
         }
 
-        const resp = await fetch(`${baseUrl}/create_mcq/`, {
+        const resp = await fetch(`${baseUrl}/ask_query/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -249,7 +249,7 @@ const QuizComp = () => {
         const parsedResult = result.message;
         console.log("parsed mcq res : ", parsedResult);
         setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-        setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
+        setCurrentIndexTextExtraction(currentIndexTextExtraction + 3000);
       } catch (error) {
         console.error(error);
         setTranscriptError(true);
@@ -264,48 +264,28 @@ const QuizComp = () => {
     <div className="flashCardsWrapper">
       {isYoutube === "" ? <button onClick={checkYoutube}>Start</button> : null}
 
-      <button onClick={savePdf}>Save as PDF</button>
-
       {isYoutube === "Yes" && (
-        <>
-          {/* <input
-            type="number"
-            id="textExtractionInput"
-            onChange={(e) => setInputNumber(e.target.value)}
-            placeholder="Number of Questions"
-          /> */}
-          <button onClick={createQuestionAnswers} disabled={loading}>
-            {loading && hasGeneratedFlashCards
-              ? "Generating More Questions..."
-              : hasGeneratedFlashCards
-              ? "Generate More Questions"
-              : "Generate Questions"}
-          </button>
-        </>
+        <button onClick={createQuestionAnswers} disabled={loading}>
+          {loading && hasGeneratedFlashCards
+            ? "Generating More Questions..."
+            : hasGeneratedFlashCards
+            ? "Generate More Questions"
+            : "Generate Questions"}
+        </button>
       )}
       {isYoutube === "No" && (
-        <>
-          {/* <input
-            type="number"
-            id="textExtractionInput"
-            onChange={(e) => setInputNumber(e.target.value)}
-            placeholder="Number of Questions"
-          /> */}
-          <button onClick={handleTextExtraction} disabled={loading}>
-            {loading && hasExtractedText
-              ? "Extracting More Text..."
-              : hasExtractedText
-              ? "Extract More Text"
-              : "Extract Text"}
-          </button>
-        </>
+        <button onClick={handleTextExtraction} disabled={loading}>
+          {loading && hasExtractedText
+            ? "Extracting More Text..."
+            : hasExtractedText
+            ? "Extract More Text"
+            : "Extract Text"}
+        </button>
       )}
-      {loading && <h3 style={{ color: "black" }}>Creating Flashcards...</h3>}
+      {loading && <h3 style={{ color: "black" }}>Creating Quiz...</h3>}
       {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
       {transcriptError && (
-        <h3 style={{ color: "black" }}>
-          Could not fetch transcriptions for the current video
-        </h3>
+        <h3 style={{ color: "black" }}>Some error occured</h3>
       )}
       {console.log("before passing quizdata to comp : ", quizData)}
 
@@ -313,6 +293,7 @@ const QuizComp = () => {
         <>
           {console.log("passing quizdata to comp : ", quizData)}
           <Quiz questions={quizData} />
+          <button onClick={savePdf}>Save as PDF</button>
         </>
       )}
     </div>
