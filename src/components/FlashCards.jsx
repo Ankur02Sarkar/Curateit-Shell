@@ -301,34 +301,34 @@ const FlashCards = () => {
         <h3 style={{ color: "black" }}>Some error occured</h3>
       )}
       {quizData && (
-        <>
-          <div id="quiz-data" className="flashCards">
-            {quizData.map((item, index) => (
-              <label key={index}>
-                <input type="checkbox" />
-                <div className="flip-card">
-                  <div className="front">
-                    <h1>Question</h1>
-                    <hr />
-                    <p>{item.question}</p>
-                    <hr />
-                    <p className="click">Show Answer</p>
-                  </div>
-                  <div className="back">
-                    <h1>Answer</h1>
-                    <hr />
-                    <p>{item.answer}</p>
-                    <hr />
-                    <p className="click">Show Question</p>
-                  </div>
+        <div id="quiz-data" className="flashCards">
+          {quizData.map((item, index) => (
+            <label key={index}>
+              <input type="checkbox" />
+              <div className="flip-card">
+                <div className="front">
+                  <h1>Question</h1>
+                  <hr />
+                  <p>{item.question}</p>
+                  <hr />
+                  <p className="click">Show Answer</p>
                 </div>
-              </label>
-            ))}
-          </div>
-          <button onClick={savePdf} style={{ margin: "auto" }}>
-            Save as PDF
-          </button>
-        </>
+                <div className="back">
+                  <h1>Answer</h1>
+                  <hr />
+                  <p>{item.answer}</p>
+                  <hr />
+                  <p className="click">Show Question</p>
+                </div>
+              </div>
+            </label>
+          ))}
+          {quizData.length > 0 && (
+            <button onClick={savePdf} style={{ margin: "auto" }}>
+              Save as PDF
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
