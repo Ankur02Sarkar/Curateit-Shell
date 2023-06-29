@@ -70,10 +70,14 @@ const Quiz = (props) => {
                 return (
                   <button
                     className={`button ${
-                      clicked && i === selectedAnswer
-                        ? ans.isCorrect
+                      clicked
+                        ? i === selectedAnswer
+                          ? ans.isCorrect
+                            ? "correct"
+                            : "wrong"
+                          : ans.isCorrect
                           ? "correct"
-                          : "wrong"
+                          : "button"
                         : "button"
                     }`}
                     disabled={clicked}
@@ -82,10 +86,10 @@ const Quiz = (props) => {
                   >
                     {ans.answerText}
                   </button>
-                );
+                );                
               })}
               <div className="actions">
-                <button onClick={handlePlayAgain}>Quit</button>
+                <button onClick={handlePlayAgain}>Back</button>
                 <button disabled={!clicked} onClick={handleNextOption}>
                   Next
                 </button>

@@ -5,7 +5,7 @@ const QuizResult = (props) => {
     <div className="score-section">
       <h2>Completed!</h2>
       <h4>
-        Total Score {props.score}/{5 * props.totalQues}
+        Total Score {props.score}/{1 * props.totalQues}
       </h4>
       <h4>
         Correct Questions {props.CorrectAns} out of {props.totalQues}

@@ -19,7 +19,7 @@ const FlashCards = () => {
   const [isYoutube, setIsYoutube] = useState("");
   const [siteUrl, setSiteUrl] = useState("");
   const [text, setText] = useState("");
-  const [inputNumber, setInputNumber] = useState("");
+  const [inputNumber, setInputNumber] = useState(2);
   const [currentIndexFlashCards, setCurrentIndexFlashCards] = useState(0);
   const [currentIndexTextExtraction, setCurrentIndexTextExtraction] =
     useState(0);
@@ -27,6 +27,7 @@ const FlashCards = () => {
   const [hasExtractedText, setHasExtractedText] = useState(false);
   const [endOfResult, setEndOfResult] = useState(false);
   const [radioSelection, setRadioSelection] = useState("flashCardsWrapper");
+  const [transcriptError, setTranscriptError] = useState(false);
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("Base Url : ", baseUrl);
@@ -105,6 +106,8 @@ const FlashCards = () => {
   const createQuestionAnswers = async () => {
     setLoading(true);
     setEndOfResult(false);
+    setTranscriptError(false); // Resetting the error status before a new request
+
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
       console.log("url from createQuestionAnswers : ", siteUrl);
@@ -113,59 +116,77 @@ const FlashCards = () => {
       const videoId = new URLSearchParams(url.search).get("v");
       console.log("YouTube video ID: ", videoId);
 
-      const response = await fetch(
-        `${baseUrl}/transcript/${videoId}/${currentIndexFlashCards}/${
-          currentIndexFlashCards + 8000
-        }`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      try {
+        const response = await new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            reject(new Error("Transcription fetch operation timed out"));
+          }, 60000); // 60 seconds
 
-      if (currentIndexFlashCards + 8000 >= data.transcription.length) {
-        setCurrentIndexFlashCards(0); // Reset index to 0 if we've reached the end
-      } else {
+          fetch(
+            `${baseUrl}/transcript/${videoId}/${currentIndexFlashCards}/${
+              currentIndexFlashCards + 8000
+            }`
+          ).then((response) => {
+            clearTimeout(timer);
+            resolve(response);
+          });
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (currentIndexFlashCards + 8000 >= data.transcription.length) {
+          setCurrentIndexFlashCards(0); // Reset index to 0 if we've reached the end
+        } else {
+          setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
+        }
+
+        setTranscript(data.transcription);
+        console.log("Transcript : ", data.transcription);
+
+        if (data.transcription == "") {
+          console.log("Empty transcription:", data.transcription);
+          setLoading(false);
+          setEndOfResult(true);
+          return;
+        }
+
+        const resp = await fetch(`${baseUrl}/create_flashcards/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: `Create ${inputNumber} question and answer based on the following context :- 
+              ${data.transcription}
+            `,
+          }),
+        });
+
+        let result = await resp.json();
+        console.log("res from flashcards api :: ", result.message);
+        const parsedResult = result.message;
+        console.log("parsed flashcards res : ", parsedResult);
+        setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
         setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
-      }
-      setTranscript(data.transcription);
-      console.log("Transcript : ", data.transcription);
-      if (data.transcription == "") {
-        console.log("Empty transcription:", data.transcription);
+      } catch (error) {
+        console.error("error : ", error);
+        setTranscriptError(true);
+      } finally {
         setLoading(false);
-        setEndOfResult(true);
-        return;
       }
-
-      const resp = await fetch(`${baseUrl}/create_flashcards/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: `Create ${inputNumber} question and answer based on the following context :- 
-            ${data.transcription}
-        `,
-        }),
-      });
-
-      let result = await resp.json();
-
-      console.log("res from flashcards api :: ", result.message);
-      // const jsonResult = result.message;
-      const parsedResult = result.message;
-      console.log("parsed flashcards res : ", parsedResult);
-
-      setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-      setCurrentIndexFlashCards(currentIndexFlashCards + 8000);
-      setLoading(false);
+      setHasGeneratedFlashCards(true);
     });
-    setHasGeneratedFlashCards(true);
   };
 
   const handleTextExtraction = async () => {
     setLoading(true);
     setEndOfResult(false);
+    setTranscriptError(false); // Resetting the error status before a new request
+
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
       console.log("url from handleTextExtraction : ", siteUrl);
@@ -173,53 +194,71 @@ const FlashCards = () => {
       const encodedUrl = encodeURIComponent(siteUrl);
       console.log("Encoded URL : ", encodedUrl);
 
-      const response = await fetch(
-        `${baseUrl}/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
-          currentIndexTextExtraction + 8000
-        }`
-      );
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
+      try {
+        const response = await new Promise((resolve, reject) => {
+          const timer = setTimeout(() => {
+            reject(new Error("Text extraction fetch operation timed out"));
+          }, 60000); // 60 seconds
 
-      if (currentIndexTextExtraction + 8000 >= data.text.length) {
-        setCurrentIndexTextExtraction(0); // Reset index to 0 if we've reached the end
-      } else {
+          fetch(
+            `${baseUrl}/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
+              currentIndexTextExtraction + 8000
+            }`
+          ).then((response) => {
+            clearTimeout(timer);
+            resolve(response);
+          });
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (currentIndexTextExtraction + 8000 >= data.text.length) {
+          setCurrentIndexTextExtraction(0); // Reset index to 0 if we've reached the end
+        } else {
+          setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
+        }
+
+        setText(data.text);
+        console.log("Text : ", data.text);
+
+        if (data.text == "") {
+          console.log("Empty Text:", data.text);
+          setLoading(false);
+          setEndOfResult(true);
+          return;
+        }
+
+        const resp = await fetch(`${baseUrl}/create_flashcards/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: `Create ${inputNumber} question and answer based on the following context :- 
+              ${data.text}
+            `,
+          }),
+        });
+
+        let result = await resp.json();
+
+        console.log("res from flashcards api :: ", result.message);
+        const parsedResult = result.message;
+        console.log("parsed flashcards res : ", parsedResult);
+        setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
         setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
-      }
-      setText(data.text);
-      console.log("Text : ", data.text);
-      if (data.text == "") {
-        console.log("Empty Text:", data.text);
+      } catch (error) {
+        console.error(error);
+        setTranscriptError(true);
+      } finally {
         setLoading(false);
-        setEndOfResult(true);
-        return;
       }
-
-      const resp = await fetch(`${baseUrl}/create_flashcards/`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          text: `Create ${inputNumber} question and answer based on the following context :- 
-            ${data.text}
-          `,
-        }),
-      });
-
-      let result = await resp.json();
-
-      console.log("res from flashcards api :: ", result.message);
-      // const jsonResult = result.message;
-      const parsedResult = result.message;
-      console.log("parsed flashcards res : ", parsedResult);
-      setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-      setCurrentIndexTextExtraction(currentIndexTextExtraction + 8000);
-      setLoading(false);
+      setHasExtractedText(true);
     });
-    setHasExtractedText(true);
   };
 
   return (
@@ -232,13 +271,13 @@ const FlashCards = () => {
 
       {isYoutube === "Yes" && (
         <>
-          <input
+          {/* <input
             type="number"
             style={{ margin: "auto" }}
             id="textExtractionInput"
             onChange={(e) => setInputNumber(e.target.value)}
             placeholder="Number of Flashcards"
-          />
+          /> */}
           <button
             onClick={createQuestionAnswers}
             disabled={loading}
@@ -254,13 +293,13 @@ const FlashCards = () => {
       )}
       {isYoutube === "No" && (
         <>
-          <input
+          {/* <input
             type="number"
             style={{ margin: "auto" }}
             id="textExtractionInput"
             onChange={(e) => setInputNumber(e.target.value)}
             placeholder="Number of Flashcards"
-          />
+          /> */}
           <button
             onClick={handleTextExtraction}
             disabled={loading}
@@ -274,8 +313,13 @@ const FlashCards = () => {
           </button>
         </>
       )}
-      {loading && <h3>Creating Flashcards...</h3>}
-      {endOfResult && <h3>No more Content</h3>}
+      {loading && <h3 style={{ color: "black" }}>Creating Flashcards...</h3>}
+      {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
+      {transcriptError && (
+        <h3 style={{ color: "black" }}>
+          Could not fetch transcriptions for the current video
+        </h3>
+      )}
       {quizData && (
         <div id="quiz-data" className="flashCards">
           {quizData.map((item, index) => (
