@@ -9,13 +9,13 @@ body {
 
 
 .app {
-    background-color: #252d4a;
+    /* background-color: #252d4a; */
     width: auto;
     min-height: 250px;
     height: min-content;
     border-radius: 15px;
     padding: 20px;
-    box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75);
+    /* box-shadow: 10px 10px 42px 0px rgba(0, 0, 0, 0.75); */
     display: flex;
     justify-content: space-evenly;
 }
@@ -70,14 +70,6 @@ body {
     cursor: pointer;
 }
 
-.correct {
-    background-color: #2f922f !important;
-}
-
-.wrong {
-    background-color: red !important;
-}
-
 .app button:hover {
     background-color: #555e7d;
 }
@@ -103,4 +95,14 @@ body {
 .actions button:hover {
     background-color: #234668;
     color: white;
+}
+
+.correct a {
+    background-color: rgb(187 247 208 / 1);
+    color: rgb(21 128 61 / 1);
+}
+
+.wrong a {
+    background-color: rgb(254 202 202 / 1);
+    color: rgb(185 28 28 / 1);
 }

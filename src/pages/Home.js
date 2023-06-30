@@ -83,9 +83,7 @@ const Home = () => {
           onChange={(e) => setShowComp(e.target.value)}
           className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
         >
-          <option value="" disabled>
-            Select an Option
-          </option>
+          <option value="">--Select an Utility--</option>
           <option value="Quiz">Quiz</option>
           <option value="FlashCards">Flashcards</option>
           <option value="Summary">Summary Highlights</option>
