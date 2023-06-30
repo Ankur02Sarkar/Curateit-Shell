@@ -261,6 +261,59 @@ const FlashCards = () => {
     });
   };
 
+  const [cards, setCards] = useState([]);
+  const [currentCard, setCurrentCard] = useState(0);
+  const [animationClass, setAnimationClass] = useState("show");
+  const data = [
+    {
+      id: 1,
+      text: "This is card 1",
+    },
+    {
+      id: 2,
+      text: "This is card 2",
+    },
+    {
+      id: 3,
+      text: "This is card 3",
+    },
+    {
+      id: 4,
+      text: "This is card 4",
+    },
+    {
+      id: 5,
+      text: "This is card 5",
+    },
+    {
+      id: 6,
+      text: "This is card 6",
+    },
+    {
+      id: 7,
+      text: "This is card 7",
+    },
+  ];
+
+  useEffect(() => {
+    setCards(data);
+  }, []);
+
+  const handleNext = () => {
+    setAnimationClass("");
+    setTimeout(() => {
+      setCurrentCard(currentCard + 1);
+      setAnimationClass("show");
+    }, 500);
+  };
+
+  const handleBack = () => {
+    setAnimationClass("");
+    setTimeout(() => {
+      setCurrentCard(currentCard - 1);
+      setAnimationClass("show");
+    }, 500);
+  };
   return (
     <div className="flashCardsWrapper">
       {isYoutube === "" ? <button onClick={checkYoutube}>Start</button> : null}
@@ -306,19 +359,27 @@ const FlashCards = () => {
             <label key={index}>
               <input type="checkbox" />
               <div className="flip-card">
-                <div className="front">
-                  <h1>Question</h1>
-                  <hr />
-                  <p>{item.question}</p>
-                  <hr />
-                  <p className="click">Show Answer</p>
+                <div className="front max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
+                  <p className="mb-3 text-lg">{item.question}</p>
+                  <div className="self-end">
+                    <p
+                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
+outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
+                    >
+                      Show Answer
+                    </p>
+                  </div>
                 </div>
-                <div className="back">
-                  <h1>Answer</h1>
-                  <hr />
-                  <p>{item.answer}</p>
-                  <hr />
-                  <p className="click">Show Question</p>
+                <div className="back max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
+                  <p className="mb-3 text-lg">{item.answer}</p>
+                  <div className="self-end">
+                    <p
+                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
+outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
+                    >
+                      Show Question
+                    </p>
+                  </div>
                 </div>
               </div>
             </label>

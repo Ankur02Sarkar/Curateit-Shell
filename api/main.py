@@ -13,7 +13,8 @@ from pathlib import Path
 env_path = Path('..') / '.env'
 load_dotenv(dotenv_path=env_path)
 
-openai.api_key = os.getenv('REACT_APP_OPENAI_API_KEY')
+# openai.api_key = os.getenv('REACT_APP_OPENAI_API_KEY')
+openai.api_key = "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"
 
 class Item(BaseModel):
     text: str
