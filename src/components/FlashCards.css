@@ -68,11 +68,11 @@ label:hover :checked+.flip-card {
 	overflow: hidden;
 }
 
-.front, 
-.back{
+.front,
+.back {
 	width: 100%;
 }
-  
+
 .flip-card .front,
 .flip-card .back {
 	position: absolute;
@@ -86,4 +86,3 @@ label:hover :checked+.flip-card {
 .flip-card .back {
 	transform: rotateY(180deg);
 }
-

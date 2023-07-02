@@ -1,0 +1,13 @@
+.layoutWrapper {
+    display: flex;
+    color: black;
+    margin-left: 10px;
+    min-width: 200px;
+    justify-content: flex-end;
+}
+
+.layout {
+    padding: 10px;
+    cursor: pointer;
+    /* border: 1px solid black; */
+}

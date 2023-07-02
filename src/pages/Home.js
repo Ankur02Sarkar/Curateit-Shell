@@ -1,11 +1,13 @@
 /*global chrome*/
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdQuiz } from "react-icons/md";
+import { MdQuiz, MdSaveAlt } from "react-icons/md";
 import { BsCardText, BsUpload } from "react-icons/bs";
+import { TfiLayoutGrid2 } from "react-icons/tfi";
+import { CiBoxList } from "react-icons/ci";
 import FlashCards from "../components/FlashCards";
 import QuizComp from "../components/QuizComp";
-
+import "./home.css";
 const Home = () => {
   const [showComp, setShowComp] = useState("");
   const [showBtns, setShowBtns] = useState(true);
@@ -25,34 +27,40 @@ const Home = () => {
     navigate("/login");
   };
 
+  const handleQuizClick = () => {
+    setShowComp("Quiz");
+    setShowBtns(false);
+  };
+
+  const handleFlashCardsClick = () => {
+    setShowComp("FlashCards");
+    setShowBtns(false);
+  };
+
+  const handleSummaryClick = () => {
+    setShowComp("Summary");
+    setShowBtns(false);
+  };
+
   return (
     <div className="justify-around items-center h-[100vh] w-full bg-slate-50 grid">
       {showBtns && (
         <div className="flex flex-col gap-[20px]">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={() => {
-              setShowComp("Quiz");
-              setShowBtns(false);
-            }}
+            onClick={handleQuizClick}
           >
             Quiz
           </button>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={() => {
-              setShowBtns(false);
-              setShowComp("FlashCards");
-            }}
+            onClick={handleFlashCardsClick}
           >
             Flashcards
           </button>
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md"
-            onClick={() => {
-              setShowBtns(false);
-              setShowComp("Summary");
-            }}
+            onClick={handleSummaryClick}
           >
             Summary Highlights
           </button>
@@ -79,15 +87,29 @@ const Home = () => {
         </div>
       )}
       {!showBtns && (
-        <select
-          onChange={(e) => setShowComp(e.target.value)}
-          className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
-        >
-          <option value="">--Select an Utility--</option>
-          <option value="Quiz">Quiz</option>
-          <option value="FlashCards">Flashcards</option>
-          <option value="Summary">Summary Highlights</option>
-        </select>
+        <div className="flex flex-row ">
+          <select
+            value={showComp}
+            onChange={(e) => setShowComp(e.target.value)}
+            className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
+          >
+            <option value="">--Select--</option>
+            <option value="Quiz">Quiz</option>
+            <option value="FlashCards">Flashcards</option>
+            <option value="Summary">Summary Highlights</option>
+          </select>
+          <div className="layoutWrapper ">
+            <div className="layout bg-blue-500 text-white">
+              <TfiLayoutGrid2 />
+            </div>
+            <div className="layout rounded-md bg-white">
+              <CiBoxList />
+            </div>
+            <div className="layout ml-[10px] rounded-md bg-white">
+              <MdSaveAlt />
+            </div>
+          </div>
+        </div>
       )}
       {showComp === "Quiz" ? <QuizComp /> : null}
       {showComp === "FlashCards" ? <FlashCards /> : null}

@@ -27,7 +27,7 @@ const Quiz = (props) => {
 
   const handleAnswerOption = (isCorrect, index) => {
     if (isCorrect) {
-      setScore(score + 5);
+      setScore(score + 1);
       setCorrectAns(correctAns + 1);
     }
     setSelectedAnswer(index);
@@ -56,7 +56,7 @@ const Quiz = (props) => {
           <>
             {console.log("quizData in quiz comp : ", questions)}
             <div className="p-0 w-full max-w-sm p-4 bg-white border border-gray-200 rounded-md shadow ">
-              <div className="flex justify-between bg-blue-100">
+              <div className="flex flex-row justify-between bg-blue-100">
                 <h5 className="p-[1rem] text-base text-gray-600 ">
                   Question {currentQuestion + 1} of {questions.length}
                 </h5>
@@ -68,7 +68,7 @@ const Quiz = (props) => {
                 <p className="text-sm font-bold text-black">
                   {questions[currentQuestion].question}
                 </p>
-                <ul className="my-4 space-y-3 flex flex-column gap-[20px]">
+                <ul className="my-4 space-y-3 flex flex-col gap-[20px]">
                   {questions[currentQuestion].answerOptions.map((ans, i) => {
                     return (
                       <>
@@ -127,8 +127,17 @@ const Quiz = (props) => {
                     );
                   })}
                   <div className="actions">
-                    <button onClick={handlePlayAgain}>Back</button>
-                    <button disabled={!clicked} onClick={handleNextOption}>
+                    <button
+                      style={{ border: "none" }}
+                      onClick={handlePlayAgain}
+                    >
+                      Back
+                    </button>
+                    <button
+                      style={{ border: "none" }}
+                      disabled={!clicked}
+                      onClick={handleNextOption}
+                    >
                       Next
                     </button>
                   </div>
