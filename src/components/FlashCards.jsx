@@ -15,7 +15,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const FlashCards = () => {
+const FlashCards = (props) => {
   const [transcript, setTranscript] = useState("");
   const [quizData, setQuizData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -34,6 +34,8 @@ const FlashCards = () => {
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("Base Url : ", baseUrl);
+  console.log("isYt in flashcards : ", props.isYt);
+
   const checkYoutube = async () => {
     setIsYoutube("");
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -325,6 +327,23 @@ const FlashCards = () => {
     setShowComp(e.target.value);
     setRenderedSelectWrapper(true);
   };
+
+  useEffect(() => {
+    console.log("use effect triggered");
+    //
+    setIsYoutube("No");
+    //
+    if (isYoutube === "Yes") {
+      createQuestionAnswers();
+      setHasGeneratedFlashCards(true);
+      console.log("createQuestionAnswers called");
+    } else if (isYoutube === "No") {
+      handleTextExtraction();
+      setHasExtractedText(true);
+      console.log("handleTextExtraction called");
+    }
+  }, [isYoutube]);
+
   return (
     <>
       {!renderedSelectWrapper && (
@@ -335,10 +354,12 @@ const FlashCards = () => {
             onChange={handleSelectChange}
             className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
           >
-            <option value="">--Select--</option>
+            <option value="" disabled>
+              --Select--
+            </option>
             <option value="Quiz">Quiz</option>
             <option value="FlashCards">Flashcards</option>
-            <option value="Summary">Summary Highlights</option>
+            {/* <option value="Summary">Summary Highlights</option> */}
           </select>
           <div className="layoutWrapper ">
             <div className="layout bg-blue-500 text-white">
@@ -361,8 +382,11 @@ const FlashCards = () => {
       {showComp === "Quiz" ? <QuizComp /> : null}
       {showComp === "FlashCards" ? (
         <div className="flashCardsWrapper">
+          <h1 className="text-center text-black">FlashCards</h1>
           {isYoutube === "" ? (
-            <button onClick={checkYoutube}>Start</button>
+            <button id="startBtn" onClick={checkYoutube}>
+              Start
+            </button>
           ) : null}
 
           {isYoutube === "Yes" && (
@@ -370,10 +394,11 @@ const FlashCards = () => {
               <button
                 onClick={createQuestionAnswers}
                 disabled={loading}
+                id="isYoutubeBtn"
                 style={{ margin: "auto" }}
               >
                 {loading && hasGeneratedFlashCards
-                  ? "Generating More Flashcards..."
+                  ? "Generating Flashcards..."
                   : hasGeneratedFlashCards
                   ? "Generate More Flashcards"
                   : "Generate Flashcards"}
@@ -385,10 +410,11 @@ const FlashCards = () => {
               <button
                 onClick={handleTextExtraction}
                 disabled={loading}
+                id="isSiteBtn"
                 style={{ margin: "auto" }}
               >
                 {loading && hasExtractedText
-                  ? "Extracting More Text..."
+                  ? "Extracting Text..."
                   : hasExtractedText
                   ? "Extract More Text"
                   : "Extract Text"}
@@ -396,11 +422,19 @@ const FlashCards = () => {
             </>
           )}
           {loading && (
-            <h3 style={{ color: "black" }}>Creating Flashcards...</h3>
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              Creating Flashcards...
+            </h3>
           )}
-          {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
+          {endOfResult && (
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              No more Content
+            </h3>
+          )}
           {transcriptError && (
-            <h3 style={{ color: "black" }}>Some error occured</h3>
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              Some error occured
+            </h3>
           )}
           {quizData && (
             <div id="quiz-data" className="flashCards">

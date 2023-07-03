@@ -86,40 +86,8 @@ const Home = () => {
           </div>
         </div>
       )}
-      {/* {!showBtns && (
-        <div className="flex flex-row ">
-          <select
-            value={showComp}
-            onChange={(e) => setShowComp(e.target.value)}
-            className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
-          >
-            <option value="">--Select--</option>
-            <option value="Quiz">Quiz</option>
-            <option value="FlashCards">Flashcards</option>
-            <option value="Summary">Summary Highlights</option>
-          </select>
-          <div className="layoutWrapper ">
-            <div className="layout bg-blue-500 text-white">
-              <TfiLayoutGrid2 />
-            </div>
-            <div className="layout rounded-md bg-white">
-              <CiBoxList />
-            </div>
-            <div className="layout ml-[10px] rounded-md bg-white">
-              <MdSaveAlt />
-            </div>
-          </div>
-        </div>
-      )} */}
-      {showComp === "Quiz" ? <QuizComp /> : null}
-      {showComp === "FlashCards" ? <FlashCards /> : null}
-
-      {/* <button
-        className="bg-gray-500 text-white px-4 py-2 rounded-md"
-        onClick={handleLoggout}
-      >
-        Logout
-      </button> */}
+      {showComp === "Quiz" ? <QuizComp isYt="true" /> : null}
+      {showComp === "FlashCards" ? <FlashCards isYt="false" /> : null}
     </div>
   );
 };

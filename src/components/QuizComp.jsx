@@ -15,7 +15,7 @@ const configuration = new Configuration({
 
 const openai = new OpenAIApi(configuration);
 
-const QuizComp = () => {
+const QuizComp = (props) => {
   const [transcript, setTranscript] = useState("");
   const [quizData, setQuizData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,6 +33,9 @@ const QuizComp = () => {
   const [transcriptError, setTranscriptError] = useState(false);
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
+  console.log("isYoutube : ", isYoutube);
+  console.log("isYt in quizcomp : ", props.isYt);
+
   console.log("Base Url : ", baseUrl);
   const checkYoutube = async () => {
     setIsYoutube("");
@@ -107,6 +110,7 @@ const QuizComp = () => {
   };
 
   const createQuestionAnswers = async () => {
+    console.log("create ques ans is being called");
     setLoading(true);
     setEndOfResult(false);
     setTranscriptError(false); // Resetting the error status before a new request
@@ -185,6 +189,7 @@ const QuizComp = () => {
   };
 
   const handleTextExtraction = async () => {
+    console.log("handle text ext is being called");
     setLoading(true);
     setEndOfResult(false);
     setTranscriptError(false); // Resetting the error status before a new request
@@ -269,6 +274,25 @@ const QuizComp = () => {
     setShowComp(e.target.value);
     setRenderedSelectWrapper(true);
   };
+  console.log("isYoutube after handleselectchange : ", isYoutube);
+
+  useEffect(() => {
+    console.log("use effect triggered");
+    //
+    setIsYoutube("No");
+    //
+    if (isYoutube === "Yes") {
+      createQuestionAnswers();
+      setHasGeneratedFlashCards(true);
+      console.log("createQuestionAnswers called");
+    } else if (isYoutube === "No") {
+      handleTextExtraction();
+      setHasExtractedText(true);
+      console.log("handleTextExtraction called");
+    }
+    console.log("isYoutube in useeffect: ", isYoutube);
+  }, [isYoutube]);
+
   return (
     <>
       {!renderedSelectWrapper && (
@@ -279,12 +303,12 @@ const QuizComp = () => {
             onChange={handleSelectChange}
             className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
           >
-            <option value="" disabled="true">
+            <option value="" disabled>
               --Select--
             </option>
             <option value="Quiz">Quiz</option>
             <option value="FlashCards">Flashcards</option>
-            <option value="Summary">Summary Highlights</option>
+            {/* <option value="Summary">Summary Highlights</option> */}
           </select>
           <div className="layoutWrapper ">
             <div className="layout bg-blue-500 text-white">
@@ -308,6 +332,7 @@ const QuizComp = () => {
       {showComp === "FlashCards" ? <FlashCards /> : null}
       {showComp === "Quiz" ? (
         <div className="flashCardsWrapper">
+          <h1 className="text-center text-black">Quiz</h1>
           {isYoutube === "" ? (
             <button onClick={checkYoutube}>Start</button>
           ) : null}
@@ -315,7 +340,7 @@ const QuizComp = () => {
           {isYoutube === "Yes" && (
             <button onClick={createQuestionAnswers} disabled={loading}>
               {loading && hasGeneratedFlashCards
-                ? "Generating More Questions..."
+                ? "Generating Questions..."
                 : hasGeneratedFlashCards
                 ? "Generate More Questions"
                 : "Generate Questions"}
@@ -324,16 +349,26 @@ const QuizComp = () => {
           {isYoutube === "No" && (
             <button onClick={handleTextExtraction} disabled={loading}>
               {loading && hasExtractedText
-                ? "Extracting More Text..."
+                ? "Extracting Text..."
                 : hasExtractedText
                 ? "Extract More Text"
                 : "Extract Text"}
             </button>
           )}
-          {loading && <h3 style={{ color: "black" }}>Creating Quiz...</h3>}
-          {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
+          {loading && (
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              Creating Quiz...
+            </h3>
+          )}
+          {endOfResult && (
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              No more Content
+            </h3>
+          )}
           {transcriptError && (
-            <h3 style={{ color: "black" }}>Some error occured</h3>
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              Some error occured
+            </h3>
           )}
           {console.log("before passing quizdata to comp : ", quizData)}
 

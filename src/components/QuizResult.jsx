@@ -14,6 +14,7 @@ const QuizResult = (props) => {
         Correct Questions {props.CorrectAns} out of {props.totalQues}
       </h4>
       <button
+        onClick={props.handlePlayAgain}
         className="bg-blue-500 m-auto border-none rounded-md p-2"
         style={{ width: "fit-content" }}
       >
