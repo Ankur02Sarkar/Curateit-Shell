@@ -5,7 +5,10 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import "./FlashCards.css";
 import Quiz from "./Quiz";
-
+import QuizComp from "./QuizComp";
+import { MdSaveAlt } from "react-icons/md";
+import { TfiLayoutGrid2 } from "react-icons/tfi";
+import { CiBoxList } from "react-icons/ci";
 const configuration = new Configuration({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
 });
@@ -314,84 +317,127 @@ const FlashCards = () => {
       setAnimationClass("show");
     }, 500);
   };
-  return (
-    <div className="flashCardsWrapper">
-      {isYoutube === "" ? <button onClick={checkYoutube}>Start</button> : null}
+  const [showComp, setShowComp] = useState("FlashCards");
 
-      {isYoutube === "Yes" && (
-        <>
-          <button
-            onClick={createQuestionAnswers}
-            disabled={loading}
-            style={{ margin: "auto" }}
+  const [renderedSelectWrapper, setRenderedSelectWrapper] = useState(false);
+
+  const handleSelectChange = (e) => {
+    setShowComp(e.target.value);
+    setRenderedSelectWrapper(true);
+  };
+  return (
+    <>
+      {!renderedSelectWrapper && (
+        <div className="flex flex-row ">
+          {console.log("from flashcards")}
+          <select
+            value={showComp}
+            onChange={handleSelectChange}
+            className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
           >
-            {loading && hasGeneratedFlashCards
-              ? "Generating More Flashcards..."
-              : hasGeneratedFlashCards
-              ? "Generate More Flashcards"
-              : "Generate Flashcards"}
-          </button>
-        </>
-      )}
-      {isYoutube === "No" && (
-        <>
-          <button
-            onClick={handleTextExtraction}
-            disabled={loading}
-            style={{ margin: "auto" }}
-          >
-            {loading && hasExtractedText
-              ? "Extracting More Text..."
-              : hasExtractedText
-              ? "Extract More Text"
-              : "Extract Text"}
-          </button>
-        </>
-      )}
-      {loading && <h3 style={{ color: "black" }}>Creating Flashcards...</h3>}
-      {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
-      {transcriptError && (
-        <h3 style={{ color: "black" }}>Some error occured</h3>
-      )}
-      {quizData && (
-        <div id="quiz-data" className="flashCards">
-          {quizData.map((item, index) => (
-            <label key={index}>
-              <input type="checkbox" />
-              <div className="flip-card">
-                <div className="front max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
-                  <p className="mb-3 text-lg">{item.question}</p>
-                  <div className="self-end">
-                    <p
-                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
-outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
-                    >
-                      Show Answer
-                    </p>
-                  </div>
-                </div>
-                <div className="back max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
-                  <p className="mb-3 text-lg">{item.answer}</p>
-                  <div className="self-end">
-                    <p
-                      className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
-outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
-                    >
-                      Show Question
-                    </p>
-                  </div>
-                </div>
+            <option value="">--Select--</option>
+            <option value="Quiz">Quiz</option>
+            <option value="FlashCards">Flashcards</option>
+            <option value="Summary">Summary Highlights</option>
+          </select>
+          <div className="layoutWrapper ">
+            <div className="layout bg-blue-500 text-white">
+              <TfiLayoutGrid2 />
+            </div>
+            <div className="layout rounded-md bg-white">
+              <CiBoxList />
+            </div>
+            {quizData.length > 0 && (
+              <div
+                className="layout ml-[10px] rounded-md bg-white"
+                onClick={savePdf}
+              >
+                <MdSaveAlt />
               </div>
-            </label>
-          ))}
-          {quizData.length > 0 && (
-            <button onClick={savePdf} style={{ margin: "auto" }}>
-              Save as PDF
-            </button>
-          )}
+            )}
+          </div>
         </div>
       )}
-    </div>
+      {showComp === "Quiz" ? <QuizComp /> : null}
+      {showComp === "FlashCards" ? (
+        <div className="flashCardsWrapper">
+          {isYoutube === "" ? (
+            <button onClick={checkYoutube}>Start</button>
+          ) : null}
+
+          {isYoutube === "Yes" && (
+            <>
+              <button
+                onClick={createQuestionAnswers}
+                disabled={loading}
+                style={{ margin: "auto" }}
+              >
+                {loading && hasGeneratedFlashCards
+                  ? "Generating More Flashcards..."
+                  : hasGeneratedFlashCards
+                  ? "Generate More Flashcards"
+                  : "Generate Flashcards"}
+              </button>
+            </>
+          )}
+          {isYoutube === "No" && (
+            <>
+              <button
+                onClick={handleTextExtraction}
+                disabled={loading}
+                style={{ margin: "auto" }}
+              >
+                {loading && hasExtractedText
+                  ? "Extracting More Text..."
+                  : hasExtractedText
+                  ? "Extract More Text"
+                  : "Extract Text"}
+              </button>
+            </>
+          )}
+          {loading && (
+            <h3 style={{ color: "black" }}>Creating Flashcards...</h3>
+          )}
+          {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
+          {transcriptError && (
+            <h3 style={{ color: "black" }}>Some error occured</h3>
+          )}
+          {quizData && (
+            <div id="quiz-data" className="flashCards">
+              {quizData.map((item, index) => (
+                <label key={index}>
+                  <input type="checkbox" />
+                  <div className="flip-card">
+                    <div className="front max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
+                      <p className="mb-3 text-lg">{item.question}</p>
+                      <div className="self-end">
+                        <p
+                          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
+outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
+                        >
+                          Show Answer
+                        </p>
+                      </div>
+                    </div>
+                    <div className="back max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
+                      <p className="mb-3 text-lg">{item.answer}</p>
+                      <div className="self-end">
+                        <p
+                          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
+outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
+                        >
+                          Show Question
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </label>
+              ))}
+            </div>
+          )}
+        </div>
+      ) : null}
+    </>
   );
 };
 

@@ -43,7 +43,7 @@ const Home = () => {
   };
 
   return (
-    <div className="justify-around items-center h-[100vh] w-full bg-slate-50 grid">
+    <div className="flex flex-col items-center mt-[10px] gap-[20px]">
       {showBtns && (
         <div className="flex flex-col gap-[20px]">
           <button
@@ -86,7 +86,7 @@ const Home = () => {
           </div>
         </div>
       )}
-      {!showBtns && (
+      {/* {!showBtns && (
         <div className="flex flex-row ">
           <select
             value={showComp}
@@ -110,16 +110,16 @@ const Home = () => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
       {showComp === "Quiz" ? <QuizComp /> : null}
       {showComp === "FlashCards" ? <FlashCards /> : null}
 
-      <button
+      {/* <button
         className="bg-gray-500 text-white px-4 py-2 rounded-md"
         onClick={handleLoggout}
       >
         Logout
-      </button>
+      </button> */}
     </div>
   );
 };

@@ -5,7 +5,10 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import "./FlashCards.css";
 import Quiz from "./Quiz";
-
+import FlashCards from "./FlashCards";
+import { MdSaveAlt } from "react-icons/md";
+import { TfiLayoutGrid2 } from "react-icons/tfi";
+import { CiBoxList } from "react-icons/ci";
 const configuration = new Configuration({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
 });
@@ -259,44 +262,90 @@ const QuizComp = () => {
       setHasExtractedText(true);
     });
   };
+  const [showComp, setShowComp] = useState("Quiz");
+  const [renderedSelectWrapper, setRenderedSelectWrapper] = useState(false);
 
+  const handleSelectChange = (e) => {
+    setShowComp(e.target.value);
+    setRenderedSelectWrapper(true);
+  };
   return (
-    <div className="flashCardsWrapper">
-      {isYoutube === "" ? <button onClick={checkYoutube}>Start</button> : null}
+    <>
+      {!renderedSelectWrapper && (
+        <div className="selectWrapper flex flex-row">
+          {console.log("from quiz comp")}
+          <select
+            value={showComp}
+            onChange={handleSelectChange}
+            className="outline outline-offset-2 outline-blue-500 text-black px-4 py-2 rounded-md"
+          >
+            <option value="" disabled="true">
+              --Select--
+            </option>
+            <option value="Quiz">Quiz</option>
+            <option value="FlashCards">Flashcards</option>
+            <option value="Summary">Summary Highlights</option>
+          </select>
+          <div className="layoutWrapper ">
+            <div className="layout bg-blue-500 text-white">
+              <TfiLayoutGrid2 />
+            </div>
+            <div className="layout rounded-md bg-white">
+              <CiBoxList />
+            </div>
+            {quizData.length > 0 && (
+              <div
+                className="layout ml-[10px] rounded-md bg-white"
+                onClick={savePdf}
+              >
+                <MdSaveAlt />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
-      {isYoutube === "Yes" && (
-        <button onClick={createQuestionAnswers} disabled={loading}>
-          {loading && hasGeneratedFlashCards
-            ? "Generating More Questions..."
-            : hasGeneratedFlashCards
-            ? "Generate More Questions"
-            : "Generate Questions"}
-        </button>
-      )}
-      {isYoutube === "No" && (
-        <button onClick={handleTextExtraction} disabled={loading}>
-          {loading && hasExtractedText
-            ? "Extracting More Text..."
-            : hasExtractedText
-            ? "Extract More Text"
-            : "Extract Text"}
-        </button>
-      )}
-      {loading && <h3 style={{ color: "black" }}>Creating Quiz...</h3>}
-      {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
-      {transcriptError && (
-        <h3 style={{ color: "black" }}>Some error occured</h3>
-      )}
-      {console.log("before passing quizdata to comp : ", quizData)}
+      {showComp === "FlashCards" ? <FlashCards /> : null}
+      {showComp === "Quiz" ? (
+        <div className="flashCardsWrapper">
+          {isYoutube === "" ? (
+            <button onClick={checkYoutube}>Start</button>
+          ) : null}
 
-      {quizData.length > 0 && (
-        <>
-          {console.log("passing quizdata to comp : ", quizData)}
-          <Quiz questions={quizData} />
-          <button onClick={savePdf}>Save as PDF</button>
-        </>
-      )}
-    </div>
+          {isYoutube === "Yes" && (
+            <button onClick={createQuestionAnswers} disabled={loading}>
+              {loading && hasGeneratedFlashCards
+                ? "Generating More Questions..."
+                : hasGeneratedFlashCards
+                ? "Generate More Questions"
+                : "Generate Questions"}
+            </button>
+          )}
+          {isYoutube === "No" && (
+            <button onClick={handleTextExtraction} disabled={loading}>
+              {loading && hasExtractedText
+                ? "Extracting More Text..."
+                : hasExtractedText
+                ? "Extract More Text"
+                : "Extract Text"}
+            </button>
+          )}
+          {loading && <h3 style={{ color: "black" }}>Creating Quiz...</h3>}
+          {endOfResult && <h3 style={{ color: "black" }}>No more Content</h3>}
+          {transcriptError && (
+            <h3 style={{ color: "black" }}>Some error occured</h3>
+          )}
+          {console.log("before passing quizdata to comp : ", quizData)}
+
+          {quizData.length > 0 && (
+            <>
+              {console.log("passing quizdata to comp : ", quizData)}
+              <Quiz questions={quizData} />
+            </>
+          )}
+        </div>
+      ) : null}
+    </>
   );
 };
 

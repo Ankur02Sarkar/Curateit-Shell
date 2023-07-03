@@ -13,7 +13,10 @@ const QuizResult = (props) => {
       <h4 className="">
         Correct Questions {props.CorrectAns} out of {props.totalQues}
       </h4>
-      <button className="bg-blue-500 w-fit m-auto border-none rounded-md p-2">
+      <button
+        className="bg-blue-500 m-auto border-none rounded-md p-2"
+        style={{ width: "fit-content" }}
+      >
         Play Again
       </button>
     </div>
