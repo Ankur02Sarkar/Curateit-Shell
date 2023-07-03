@@ -279,7 +279,7 @@ const QuizComp = (props) => {
   useEffect(() => {
     console.log("use effect triggered");
     //
-    setIsYoutube("No");
+    setIsYoutube(props.isYt);
     //
     if (isYoutube === "Yes") {
       createQuestionAnswers();
@@ -329,7 +329,7 @@ const QuizComp = (props) => {
         </div>
       )}
 
-      {showComp === "FlashCards" ? <FlashCards /> : null}
+      {showComp === "FlashCards" ? <FlashCards isYt={props.isYt} /> : null}
       {showComp === "Quiz" ? (
         <div className="flashCardsWrapper">
           <h1 className="text-center text-black">Quiz</h1>
