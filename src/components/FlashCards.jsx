@@ -67,8 +67,8 @@ const FlashCards = (props) => {
 
   const savePdf = () => {
     const doc = new jsPDF();
-    const pageHeight = doc.internal.pageSize.getHeight() - 20; // consider some margin
-    const pageWidth = doc.internal.pageSize.getWidth() - 20; // consider some margin
+    const pageHeight = doc.internal.pageSize.getHeight() - 20;
+    const pageWidth = doc.internal.pageSize.getWidth() - 20;
     let yCoordinate = 10;
 
     quizData.forEach((item, index) => {
@@ -81,28 +81,25 @@ const FlashCards = (props) => {
         pageWidth
       );
 
-      // Check if adding the question lines would exceed page height
       if (yCoordinate + questionLines.length * 7 > pageHeight) {
         doc.addPage();
-        yCoordinate = 10; // Reset y coordinate to top of new page
+        yCoordinate = 10;
       }
 
       doc.text(questionLines, 10, yCoordinate);
-      yCoordinate = yCoordinate + questionLines.length * 7; // consider line spacing for question text
+      yCoordinate = yCoordinate + questionLines.length * 7;
 
-      // Check if adding the answer lines would exceed page height
       if (yCoordinate + answerLines.length * 7 > pageHeight) {
         doc.addPage();
-        yCoordinate = 10; // Reset y coordinate to top of new page
+        yCoordinate = 10;
       }
 
       doc.text(answerLines, 10, yCoordinate);
-      yCoordinate = yCoordinate + answerLines.length * 7; // consider line spacing for answer text
+      yCoordinate = yCoordinate + answerLines.length * 7;
 
-      // Add space between different QA pairs, and check if it would exceed page height
       if (yCoordinate + 10 > pageHeight) {
         doc.addPage();
-        yCoordinate = 10; // Reset y coordinate to top of new page
+        yCoordinate = 10;
       } else {
         yCoordinate = yCoordinate + 10;
       }
@@ -113,7 +110,7 @@ const FlashCards = (props) => {
   const createQuestionAnswers = async () => {
     setLoading(true);
     setEndOfResult(false);
-    setTranscriptError(false); // Resetting the error status before a new request
+    setTranscriptError(false);
 
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
@@ -146,7 +143,7 @@ const FlashCards = (props) => {
         const data = await response.json();
 
         if (currentIndexFlashCards + 3000 >= data.transcription.length) {
-          setCurrentIndexFlashCards(0); // Reset index to 0 if we've reached the end
+          setCurrentIndexFlashCards(0);
         } else {
           setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
         }
@@ -192,7 +189,7 @@ const FlashCards = (props) => {
   const handleTextExtraction = async () => {
     setLoading(true);
     setEndOfResult(false);
-    setTranscriptError(false); // Resetting the error status before a new request
+    setTranscriptError(false);
 
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
@@ -205,7 +202,7 @@ const FlashCards = (props) => {
         const response = await new Promise((resolve, reject) => {
           const timer = setTimeout(() => {
             reject(new Error("Text extraction fetch operation timed out"));
-          }, 60000); // 60 seconds
+          }, 60000);
 
           fetch(
             `${baseUrl}/extract_article/${encodedUrl}/${currentIndexTextExtraction}/${
@@ -268,61 +265,7 @@ const FlashCards = (props) => {
     });
   };
 
-  const [cards, setCards] = useState([]);
-  const [currentCard, setCurrentCard] = useState(0);
-  const [animationClass, setAnimationClass] = useState("show");
-  const data = [
-    {
-      id: 1,
-      text: "This is card 1",
-    },
-    {
-      id: 2,
-      text: "This is card 2",
-    },
-    {
-      id: 3,
-      text: "This is card 3",
-    },
-    {
-      id: 4,
-      text: "This is card 4",
-    },
-    {
-      id: 5,
-      text: "This is card 5",
-    },
-    {
-      id: 6,
-      text: "This is card 6",
-    },
-    {
-      id: 7,
-      text: "This is card 7",
-    },
-  ];
-
-  useEffect(() => {
-    setCards(quizData);
-  }, []);
-
-  const handleNext = () => {
-    setAnimationClass("");
-    setTimeout(() => {
-      setCurrentCard(currentCard + 1);
-      setAnimationClass("show");
-    }, 500);
-  };
-
-  const handleBack = () => {
-    setAnimationClass("");
-    setTimeout(() => {
-      setCurrentCard(currentCard - 1);
-      setAnimationClass("show");
-    }, 500);
-  };
   const [showComp, setShowComp] = useState("FlashCards");
-
   const [renderedSelectWrapper, setRenderedSelectWrapper] = useState(false);
 
   const handleSelectChange = (e) => {
@@ -345,6 +288,17 @@ const FlashCards = (props) => {
       console.log("handleTextExtraction called");
     }
   }, [isYoutube]);
+
+  useEffect(() => {
+    if (quizData.length === 2) {
+      console.log("creating more data after first api call");
+      if (isYoutube === "Yes") {
+        createQuestionAnswers();
+      } else if (isYoutube === "No") {
+        handleTextExtraction();
+      }
+    }
+  }, [quizData.length, isYoutube]);
 
   return (
     <>
@@ -402,7 +356,10 @@ const FlashCards = (props) => {
       {showComp === "FlashCards" ? (
         <div
           className="flashCardsWrapper"
-          style={{ width: "100%", padding: "20px" }}
+          style={{
+            width: isListView ? "" : "100%",
+            padding: "20px",
+          }}
         >
           <h1 className="text-center text-black">FlashCards</h1>
           {isYoutube === "" ? (
@@ -443,22 +400,6 @@ const FlashCards = (props) => {
               </button>
             </>
           )}
-          {loading && (
-            // <h3 style={{ color: "black", textAlign: "center" }}>
-            //   Creating Flashcards...
-            // </h3>
-            <Loader />
-          )}
-          {endOfResult && (
-            <h3 style={{ color: "black", textAlign: "center" }}>
-              No more Content
-            </h3>
-          )}
-          {transcriptError && (
-            <h3 style={{ color: "black", textAlign: "center" }}>
-              Some error occured
-            </h3>
-          )}
           {quizData && (
             <div
               id="quiz-data"
@@ -494,6 +435,17 @@ outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-
                 </label>
               ))}
             </div>
+          )}
+          {loading && <Loader />}
+          {endOfResult && (
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              No more Content
+            </h3>
+          )}
+          {transcriptError && (
+            <h3 style={{ color: "black", textAlign: "center" }}>
+              Some error occured
+            </h3>
           )}
         </div>
       ) : null}

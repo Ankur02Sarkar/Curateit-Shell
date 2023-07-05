@@ -295,6 +295,17 @@ const QuizComp = (props) => {
     console.log("isYoutube in useeffect: ", isYoutube);
   }, [isYoutube]);
 
+  useEffect(() => {
+    if (quizData.length === 2) {
+      console.log("creating more data after first api call");
+      if (isYoutube === "Yes") {
+        createQuestionAnswers();
+      } else if (isYoutube === "No") {
+        handleTextExtraction();
+      }
+    }
+  }, [quizData.length, isYoutube]);
+
   return (
     <>
       {!renderedSelectWrapper && (
@@ -373,12 +384,13 @@ const QuizComp = (props) => {
                 : "Extract Text"}
             </button>
           )}
-          {loading && (
-            // <h3 style={{ color: "black", textAlign: "center" }}>
-            //   Creating Quiz...
-            // </h3>
-            <Loader />
+          {quizData.length > 0 && (
+            <>
+              {console.log("passing quizdata to comp : ", quizData)}
+              <Quiz questions={quizData} listView={isListView} />
+            </>
           )}
+          {loading && <Loader />}
           {endOfResult && (
             <h3 style={{ color: "black", textAlign: "center" }}>
               No more Content
@@ -390,13 +402,6 @@ const QuizComp = (props) => {
             </h3>
           )}
           {console.log("before passing quizdata to comp : ", quizData)}
-
-          {quizData.length > 0 && (
-            <>
-              {console.log("passing quizdata to comp : ", quizData)}
-              <Quiz questions={quizData} listView={isListView} />
-            </>
-          )}
         </div>
       ) : null}
     </>
