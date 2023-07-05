@@ -5,6 +5,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import "./FlashCards.css";
 import Quiz from "./Quiz";
+import Loader from "./Loader";
 import QuizComp from "./QuizComp";
 import { MdSaveAlt } from "react-icons/md";
 import { TfiLayoutGrid2 } from "react-icons/tfi";
@@ -364,20 +365,24 @@ const FlashCards = (props) => {
           </select>
           <div className="layoutWrapper ">
             <div
-              className="layout bg-blue-500 text-white"
               onClick={() => {
                 console.log("grid view");
                 setListView(false);
               }}
+              className={`layout rounded-md ${
+                !isListView ? "bg-blue-500 text-white" : ""
+              }`}
             >
               <TfiLayoutGrid2 />
             </div>
             <div
-              className="layout rounded-md bg-white"
               onClick={() => {
                 console.log("list view");
                 setListView(true);
               }}
+              className={`layout rounded-md ${
+                isListView ? "bg-blue-500 text-white" : ""
+              }`}
             >
               <CiBoxList />
             </div>
@@ -395,7 +400,10 @@ const FlashCards = (props) => {
 
       {showComp === "Quiz" ? <QuizComp isYt={props.isYt} /> : null}
       {showComp === "FlashCards" ? (
-        <div className="flashCardsWrapper">
+        <div
+          className="flashCardsWrapper"
+          style={{ width: "100%", padding: "20px" }}
+        >
           <h1 className="text-center text-black">FlashCards</h1>
           {isYoutube === "" ? (
             <button id="startBtn" onClick={checkYoutube}>
@@ -436,9 +444,10 @@ const FlashCards = (props) => {
             </>
           )}
           {loading && (
-            <h3 style={{ color: "black", textAlign: "center" }}>
-              Creating Flashcards...
-            </h3>
+            // <h3 style={{ color: "black", textAlign: "center" }}>
+            //   Creating Flashcards...
+            // </h3>
+            <Loader />
           )}
           {endOfResult && (
             <h3 style={{ color: "black", textAlign: "center" }}>

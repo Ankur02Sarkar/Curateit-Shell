@@ -9,6 +9,7 @@ import FlashCards from "./FlashCards";
 import { MdSaveAlt } from "react-icons/md";
 import { TfiLayoutGrid2 } from "react-icons/tfi";
 import { CiBoxList } from "react-icons/ci";
+import Loader from "./Loader";
 const configuration = new Configuration({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
 });
@@ -313,20 +314,24 @@ const QuizComp = (props) => {
           </select>
           <div className="layoutWrapper ">
             <div
-              className="layout bg-blue-500 text-white"
               onClick={() => {
                 console.log("grid view");
                 setListView(false);
               }}
+              className={`layout rounded-md ${
+                !isListView ? "bg-blue-500 text-white" : ""
+              }`}
             >
               <TfiLayoutGrid2 />
             </div>
             <div
-              className="layout rounded-md bg-white"
               onClick={() => {
                 console.log("list view");
                 setListView(true);
               }}
+              className={`layout rounded-md ${
+                isListView ? "bg-blue-500 text-white" : ""
+              }`}
             >
               <CiBoxList />
             </div>
@@ -346,7 +351,6 @@ const QuizComp = (props) => {
       {showComp === "Quiz" ? (
         <div className="flashCardsWrapper">
           <h1 className="text-center text-black">Quiz</h1>
-          {isListView && <h1 className="text-center text-black">List View</h1>}
           {isYoutube === "" ? (
             <button onClick={checkYoutube}>Start</button>
           ) : null}
@@ -370,9 +374,10 @@ const QuizComp = (props) => {
             </button>
           )}
           {loading && (
-            <h3 style={{ color: "black", textAlign: "center" }}>
-              Creating Quiz...
-            </h3>
+            // <h3 style={{ color: "black", textAlign: "center" }}>
+            //   Creating Quiz...
+            // </h3>
+            <Loader />
           )}
           {endOfResult && (
             <h3 style={{ color: "black", textAlign: "center" }}>

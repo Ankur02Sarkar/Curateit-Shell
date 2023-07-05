@@ -82,11 +82,11 @@ async def ask_query(item: Item):
                             "properties": {
                                 "question": {
                                     "type": "string",
-                                    "description": "The Question created",
+                                    "description": "The Question created, must be of a few words only",
                                 },
                                 "answer": {
                                     "type": "string",
-                                    "description": "The Answer for the current question",
+                                    "description": "The Answer for the current question, must be of a few words only",
                                 },
                                 "answerOptions": {
                                     "type": "object",
@@ -94,7 +94,7 @@ async def ask_query(item: Item):
                                     "properties": {
                                         "answerText": {
                                             "type": "string",
-                                            "description": "The Current Answer, this might be correct or wrong",
+                                            "description": "The Current Answer, this might be correct or wrong. This must be one to three words max",
                                         },
                                         "isCorrect": {
                                             "type": "boolean",
