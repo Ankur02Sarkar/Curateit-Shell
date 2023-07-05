@@ -31,6 +31,7 @@ const QuizComp = (props) => {
   const [endOfResult, setEndOfResult] = useState(false);
   const [radioSelection, setRadioSelection] = useState("flashCardsWrapper");
   const [transcriptError, setTranscriptError] = useState(false);
+  const [isListView, setListView] = useState(false);
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("isYoutube : ", isYoutube);
@@ -311,10 +312,22 @@ const QuizComp = (props) => {
             {/* <option value="Summary">Summary Highlights</option> */}
           </select>
           <div className="layoutWrapper ">
-            <div className="layout bg-blue-500 text-white">
+            <div
+              className="layout bg-blue-500 text-white"
+              onClick={() => {
+                console.log("grid view");
+                setListView(false);
+              }}
+            >
               <TfiLayoutGrid2 />
             </div>
-            <div className="layout rounded-md bg-white">
+            <div
+              className="layout rounded-md bg-white"
+              onClick={() => {
+                console.log("list view");
+                setListView(true);
+              }}
+            >
               <CiBoxList />
             </div>
             {quizData.length > 0 && (
@@ -333,6 +346,7 @@ const QuizComp = (props) => {
       {showComp === "Quiz" ? (
         <div className="flashCardsWrapper">
           <h1 className="text-center text-black">Quiz</h1>
+          {isListView && <h1 className="text-center text-black">List View</h1>}
           {isYoutube === "" ? (
             <button onClick={checkYoutube}>Start</button>
           ) : null}
@@ -375,7 +389,7 @@ const QuizComp = (props) => {
           {quizData.length > 0 && (
             <>
               {console.log("passing quizdata to comp : ", quizData)}
-              <Quiz questions={quizData} />
+              <Quiz questions={quizData} listView={isListView} />
             </>
           )}
         </div>

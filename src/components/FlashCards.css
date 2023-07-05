@@ -86,3 +86,19 @@ label:hover :checked+.flip-card {
 .flip-card .back {
 	transform: rotateY(180deg);
 }
+
+.gridView {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 20px;
+	box-sizing: border-box;
+}
+
+.gridView .quiz-label {
+	width: 100% !important;
+	box-sizing: border-box;
+}
+
+.gridView p {
+	font-size: initial;
+}

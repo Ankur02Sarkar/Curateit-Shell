@@ -104,3 +104,9 @@ body {
     background-color: rgb(254 202 202 / 1);
     color: rgb(185 28 28 / 1);
 }
+
+.listView {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

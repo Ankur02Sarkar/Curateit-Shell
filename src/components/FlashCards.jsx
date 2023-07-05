@@ -31,6 +31,7 @@ const FlashCards = (props) => {
   const [endOfResult, setEndOfResult] = useState(false);
   const [radioSelection, setRadioSelection] = useState("flashCardsWrapper");
   const [transcriptError, setTranscriptError] = useState(false);
+  const [isListView, setListView] = useState(true);
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("Base Url : ", baseUrl);
@@ -301,7 +302,7 @@ const FlashCards = (props) => {
   ];
 
   useEffect(() => {
-    setCards(data);
+    setCards(quizData);
   }, []);
 
   const handleNext = () => {
@@ -362,10 +363,22 @@ const FlashCards = (props) => {
             {/* <option value="Summary">Summary Highlights</option> */}
           </select>
           <div className="layoutWrapper ">
-            <div className="layout bg-blue-500 text-white">
+            <div
+              className="layout bg-blue-500 text-white"
+              onClick={() => {
+                console.log("grid view");
+                setListView(false);
+              }}
+            >
               <TfiLayoutGrid2 />
             </div>
-            <div className="layout rounded-md bg-white">
+            <div
+              className="layout rounded-md bg-white"
+              onClick={() => {
+                console.log("list view");
+                setListView(true);
+              }}
+            >
               <CiBoxList />
             </div>
             {quizData.length > 0 && (
@@ -438,9 +451,12 @@ const FlashCards = (props) => {
             </h3>
           )}
           {quizData && (
-            <div id="quiz-data" className="flashCards">
+            <div
+              id="quiz-data"
+              className={`flashCards ${!isListView ? "gridView" : ""}`}
+            >
               {quizData.map((item, index) => (
-                <label key={index}>
+                <label key={index} className="quiz-label">
                   <input type="checkbox" />
                   <div className="flip-card">
                     <div className="front max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
