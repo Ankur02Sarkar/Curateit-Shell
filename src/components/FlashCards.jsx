@@ -24,6 +24,8 @@ const FlashCards = (props) => {
   const [siteUrl, setSiteUrl] = useState("");
   const [text, setText] = useState("");
   const [inputNumber, setInputNumber] = useState(2);
+  const [timesTextExtrCalled, setTimesTextExtrCalled] = useState(1);
+  const [timescreateQusCalled, setTimescreateQusCalled] = useState(1);
   const [currentIndexFlashCards, setCurrentIndexFlashCards] = useState(0);
   const [currentIndexTextExtraction, setCurrentIndexTextExtraction] =
     useState(0);
@@ -108,10 +110,11 @@ const FlashCards = (props) => {
   };
 
   const createQuestionAnswers = async () => {
+    setTimescreateQusCalled(timescreateQusCalled + 1);
     setLoading(true);
     setEndOfResult(false);
     setTranscriptError(false);
-
+    console.log("will create ", inputNumber, " questions ");
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
       console.log("url from createQuestionAnswers : ", siteUrl);
@@ -164,7 +167,9 @@ const FlashCards = (props) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            text: `Create ${inputNumber} question and answer based on the following context :- 
+            text: `Create ${
+              timescreateQusCalled == 2 || timescreateQusCalled == 3 ? "5" : "2"
+            } question and answer based on the following context :- 
               ${data.transcription}
             `,
           }),
@@ -184,13 +189,15 @@ const FlashCards = (props) => {
       }
       setHasGeneratedFlashCards(true);
     });
+    console.log("timescreateQusCalled : ", timescreateQusCalled);
   };
 
   const handleTextExtraction = async () => {
+    setTimesTextExtrCalled(timesTextExtrCalled + 1);
     setLoading(true);
     setEndOfResult(false);
     setTranscriptError(false);
-
+    console.log("will create ", inputNumber, " questions ");
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
       console.log("url from handleTextExtraction : ", siteUrl);
@@ -242,7 +249,9 @@ const FlashCards = (props) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            text: `Create ${inputNumber} question and answer based on the following context :- 
+            text: `Create ${
+              timesTextExtrCalled == 2 || timesTextExtrCalled == 3 ? "5" : "2"
+            } question and answer based on the following context :- 
               ${data.text}
             `,
           }),
@@ -263,6 +272,7 @@ const FlashCards = (props) => {
       }
       setHasExtractedText(true);
     });
+    console.log("timesTextExtrCalled : ", timesTextExtrCalled);
   };
 
   const [showComp, setShowComp] = useState("FlashCards");
@@ -293,9 +303,22 @@ const FlashCards = (props) => {
     if (quizData.length === 2) {
       console.log("creating more data after first api call");
       if (isYoutube === "Yes") {
+        setInputNumber(5);
         createQuestionAnswers();
       } else if (isYoutube === "No") {
+        setInputNumber(5);
         handleTextExtraction();
+        console.log("handle text ext call finished");
+      }
+    } else if (quizData.length === 7) {
+      console.log("creating more data after first api call");
+      if (isYoutube === "Yes") {
+        setInputNumber(5);
+        createQuestionAnswers();
+      } else if (isYoutube === "No") {
+        setInputNumber(5);
+        handleTextExtraction();
+        console.log("handle text ext call finished");
       }
     }
   }, [quizData.length, isYoutube]);
