@@ -78,7 +78,7 @@ async def ask_query(item: Item):
                     "properties": {
                         "qna": {
                             "type": "object",
-                            "description": "An array of MCQ questions and answers",
+                            "description": "An array of MCQ questions and answers, the answer options must be extremely short",
                             "properties": {
                                 "question": {
                                     "type": "string",
@@ -86,15 +86,15 @@ async def ask_query(item: Item):
                                 },
                                 "answer": {
                                     "type": "string",
-                                    "description": "The Answer for the current question, must be of a few words only",
+                                    "description": "The extremely short answer for the current question.",
                                 },
                                 "answerOptions": {
                                     "type": "object",
-                                    "description": "An array of different options among which only one answer is correct",
+                                    "description": "An array of different extremely short options among which only one answer is correct",
                                     "properties": {
                                         "answerText": {
                                             "type": "string",
-                                            "description": "The Current Answer, this might be correct or wrong. This must be one to three words max",
+                                            "description": "The Current extremely short Answer, this might be correct or wrong",
                                         },
                                         "isCorrect": {
                                             "type": "boolean",

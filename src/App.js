@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
-import FlashCards from "./components/FlashCards";
+import Summary from "./components/Summary";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCurrentTab } from "./utils/fetch-current-tab";
 import session from "./utils/session";

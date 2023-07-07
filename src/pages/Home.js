@@ -7,6 +7,8 @@ import { TfiLayoutGrid2 } from "react-icons/tfi";
 import { CiBoxList } from "react-icons/ci";
 import FlashCards from "../components/FlashCards";
 import QuizComp from "../components/QuizComp";
+import Summary from "../components/Summary";
+
 import "./home.css";
 const Home = () => {
   const [showComp, setShowComp] = useState("");
@@ -108,6 +110,7 @@ const Home = () => {
       )}
       {showComp === "Quiz" ? <QuizComp isYt={isYoutube} /> : null}
       {showComp === "FlashCards" ? <FlashCards isYt={isYoutube} /> : null}
+      {showComp === "Summary" ? <Summary isYt={isYoutube} /> : null}
     </div>
   );
 };

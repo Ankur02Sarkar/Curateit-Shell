@@ -6,6 +6,7 @@ import html2canvas from "html2canvas";
 import "./FlashCards.css";
 import Quiz from "./Quiz";
 import FlashCards from "./FlashCards";
+import Summary from "./Summary";
 import { MdSaveAlt } from "react-icons/md";
 import { TfiLayoutGrid2 } from "react-icons/tfi";
 import { CiBoxList } from "react-icons/ci";
@@ -34,7 +35,7 @@ const QuizComp = (props) => {
   const [endOfResult, setEndOfResult] = useState(false);
   const [radioSelection, setRadioSelection] = useState("flashCardsWrapper");
   const [transcriptError, setTranscriptError] = useState(false);
-  const [isListView, setListView] = useState(false);
+  const [isListView, setListView] = useState(true);
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("isYoutube : ", isYoutube);
@@ -342,7 +343,7 @@ const QuizComp = (props) => {
             </option>
             <option value="Quiz">Quiz</option>
             <option value="FlashCards">Flashcards</option>
-            {/* <option value="Summary">Summary Highlights</option> */}
+            <option value="Summary">Summary Highlights</option>
           </select>
           <div className="layoutWrapper ">
             <div
@@ -380,6 +381,7 @@ const QuizComp = (props) => {
       )}
 
       {showComp === "FlashCards" ? <FlashCards isYt={props.isYt} /> : null}
+      {showComp === "Summary" ? <Summary isYt={props.isYt} /> : null}
       {showComp === "Quiz" ? (
         <div className="flashCardsWrapper">
           <h1 className="text-center text-black">Quiz</h1>

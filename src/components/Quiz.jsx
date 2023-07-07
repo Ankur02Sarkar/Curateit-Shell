@@ -88,7 +88,7 @@ const Quiz = (props) => {
                 <p className="text-sm font-bold text-black">
                   {questions[qIndex].question}
                 </p>
-                <ul className="my-4 space-y-3">
+                <ul className="my-4 space-y-3 flex flex-col gap-[20px]">
                   {questions[qIndex].answerOptions.map((ans, i) => (
                     <button
                       disabled={clicked[qIndex]}

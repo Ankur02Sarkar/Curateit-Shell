@@ -7,17 +7,18 @@ import "./FlashCards.css";
 import Quiz from "./Quiz";
 import Loader from "./Loader";
 import QuizComp from "./QuizComp";
-import Summary from "./Summary";
+import FlashCards from "./FlashCards";
 import { MdSaveAlt } from "react-icons/md";
 import { TfiLayoutGrid2 } from "react-icons/tfi";
 import { CiBoxList } from "react-icons/ci";
+import "./summary.css";
 const configuration = new Configuration({
   apiKey: process.env.REACT_APP_OPENAI_API_KEY,
 });
 
 const openai = new OpenAIApi(configuration);
 
-const FlashCards = (props) => {
+const Summary = (props) => {
   const [transcript, setTranscript] = useState("");
   const [quizData, setQuizData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -36,6 +37,33 @@ const FlashCards = (props) => {
   const [radioSelection, setRadioSelection] = useState("flashCardsWrapper");
   const [transcriptError, setTranscriptError] = useState(false);
   const [isListView, setListView] = useState(true);
+
+  const summaryData = [
+    {
+      title: "Learn Java in 14 Minutes",
+      highlight: `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae,
+      necessitatibus delectus hic nobis sunt totam facilis nulla
+      perspiciatis id veritatis eius eum tempora temporibus
+      reprehenderit vel illo, molestiae, quos quibusdam! Deserunt
+      laborum modi sapiente molestias quo eius, consequuntur iste!
+      Doloremque cupiditate ipsa nisi accusantium nemo earum placeat vel
+      eos maiores velit quia autem, officia tempora expedita impedit
+      fuga? Magni, atque. Impedit blanditiis corrupti ab ad eum, placeat
+      fugiat assumenda, eveniet mollitia a voluptas. Delectus deserunt
+      enim laborum similique, exercitationem dicta quibusdam adipisci
+      commodi, eaque dolore pariatur nostrum, sed ad itaque! Quas maxime
+      repellat deserunt id esse tempora impedit nostrum praesentium
+      accusamus, expedita commodi minus consequatur eligendi, facilis ut
+      porro accusantium, voluptatum fugit eum qui eos placeat earum
+      fuga? Eum, et! Deserunt quibusdam assumenda maiores quidem dolorem
+      expedita quod odio ex, accusantium laudantium soluta dignissimos
+      non provident, animi, voluptate tempora odit sequi perferendis
+      nulla debitis. Et fugiat cupiditate reprehenderit nihil hic?
+      `,
+      pic: "https://i.ytimg.com/vi/RRubcjpTkks/maxresdefault.jpg",
+      tag: ["Java", "Data Type", "Logic"],
+    },
+  ];
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("Base Url : ", baseUrl);
@@ -276,53 +304,13 @@ const FlashCards = (props) => {
     console.log("timesTextExtrCalled : ", timesTextExtrCalled);
   };
 
-  const [showComp, setShowComp] = useState("FlashCards");
+  const [showComp, setShowComp] = useState("Summary");
   const [renderedSelectWrapper, setRenderedSelectWrapper] = useState(false);
 
   const handleSelectChange = (e) => {
     setShowComp(e.target.value);
     setRenderedSelectWrapper(true);
   };
-
-  useEffect(() => {
-    console.log("use effect triggered");
-    //
-    setIsYoutube(props.isYt);
-    //
-    if (isYoutube === "Yes") {
-      createQuestionAnswers();
-      setHasGeneratedFlashCards(true);
-      console.log("createQuestionAnswers called");
-    } else if (isYoutube === "No") {
-      handleTextExtraction();
-      setHasExtractedText(true);
-      console.log("handleTextExtraction called");
-    }
-  }, [isYoutube]);
-
-  useEffect(() => {
-    if (quizData.length === 2) {
-      console.log("creating more data after first api call");
-      if (isYoutube === "Yes") {
-        setInputNumber(5);
-        createQuestionAnswers();
-      } else if (isYoutube === "No") {
-        setInputNumber(5);
-        handleTextExtraction();
-        console.log("handle text ext call finished");
-      }
-    } else if (quizData.length === 7) {
-      console.log("creating more data after first api call");
-      if (isYoutube === "Yes") {
-        setInputNumber(5);
-        createQuestionAnswers();
-      } else if (isYoutube === "No") {
-        setInputNumber(5);
-        handleTextExtraction();
-        console.log("handle text ext call finished");
-      }
-    }
-  }, [quizData.length, isYoutube]);
 
   return (
     <>
@@ -377,8 +365,8 @@ const FlashCards = (props) => {
       )}
 
       {showComp === "Quiz" ? <QuizComp isYt={props.isYt} /> : null}
-      {showComp === "Summary" ? <Summary isYt={props.isYt} /> : null}
-      {showComp === "FlashCards" ? (
+      {showComp === "FlashCards" ? <FlashCards isYt={props.isYt} /> : null}
+      {showComp === "Summary" ? (
         <div
           className="flashCardsWrapper"
           style={{
@@ -386,81 +374,58 @@ const FlashCards = (props) => {
             padding: "20px",
           }}
         >
-          <h1 className="text-center text-black">FlashCards</h1>
-          {isYoutube === "" ? (
-            <button id="startBtn" onClick={checkYoutube}>
-              Start
-            </button>
-          ) : null}
+          <h1 className="text-center text-black">Summary Highlights</h1>
 
-          {isYoutube === "Yes" && (
-            <>
-              <button
-                onClick={createQuestionAnswers}
-                disabled={loading}
-                id="isYoutubeBtn"
-                style={{ margin: "auto" }}
-              >
-                {loading && hasGeneratedFlashCards
-                  ? "Generating Flashcards..."
-                  : hasGeneratedFlashCards
-                  ? "Generate More Flashcards"
-                  : "Generate Flashcards"}
-              </button>
-            </>
-          )}
-          {isYoutube === "No" && (
-            <>
-              <button
-                onClick={handleTextExtraction}
-                disabled={loading}
-                id="isSiteBtn"
-                style={{ margin: "auto" }}
-              >
-                {loading && hasExtractedText
-                  ? "Extracting Text..."
-                  : hasExtractedText
-                  ? "Extract More Text"
-                  : "Extract Text"}
-              </button>
-            </>
-          )}
-          {quizData && (
+          {summaryData.map((summary) => (
             <div
-              id="quiz-data"
-              className={`flashCards ${!isListView ? "gridView" : ""}`}
+              key={summary.title}
+              className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-1cym44n text-black"
             >
-              {quizData.map((item, index) => (
-                <label key={index} className="quiz-label">
-                  <input type="checkbox" />
-                  <div className="flip-card">
-                    <div className="front max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
-                      <p className="mb-3 text-lg">{item.question}</p>
-                      <div className="self-end">
-                        <p
-                          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
-outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
-                        >
-                          Show Answer
-                        </p>
-                      </div>
-                    </div>
-                    <div className="back max-w-sm p-6 border rounded-lg bg-blue-50 border-blue-300 flex flex-col justify-between">
-                      <p className="mb-3 text-lg">{item.answer}</p>
-                      <div className="self-end">
-                        <p
-                          className="inline-flex items-center px-3 py-2 text-sm font-medium text-center outline outline-offset-1 
-outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-white"
-                        >
-                          Show Question
-                        </p>
+              <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                <h5 className="MuiTypography-root MuiTypography-h5 css-11604fz text-center">
+                  {summary.title}
+                </h5>
+              </div>
+              <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                <img
+                  className="MuiBox-root css-oafhs5"
+                  src={summary.pic}
+                  alt={summary.title}
+                ></img>
+              </div>
+              <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                <div className="MuiBox-root css-1vfxzmk">
+                  <p className="p-[10px]">{summary.highlight}</p>
+                </div>
+              </div>
+              <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-tuxzvu">
+                <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                  <div className="MuiBox-root css-jejy0m">
+                    <strong className="MuiTypography-root MuiTypography-subtitle1 css-11arlvz">
+                      Key Mentions
+                    </strong>
+                    <div className="MuiGrid-root MuiGrid-container css-1d3bbye">
+                      <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                        {summary.tag.map((tag, index) => (
+                          <div
+                            key={index}
+                            className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
+                            tabIndex="0"
+                            role="button"
+                          >
+                            <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
+                              <span className="">{tag}</span>
+                            </span>
+                            <span className="MuiTouchRipple-root css-w0pj6f"></span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
-                </label>
-              ))}
+                </div>
+              </div>
             </div>
-          )}
+          ))}
           {loading && <Loader />}
           {endOfResult && (
             <h3 style={{ color: "black", textAlign: "center" }}>
@@ -478,4 +443,4 @@ outline-blue-500 rounded-md border-2 text-blue-700 hover:bg-blue-500 hover:text-
   );
 };
 
-export default FlashCards;
+export default Summary;
