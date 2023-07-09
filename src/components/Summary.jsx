@@ -26,8 +26,8 @@ const Summary = (props) => {
   const [siteUrl, setSiteUrl] = useState("");
   const [text, setText] = useState("");
   const [inputNumber, setInputNumber] = useState(2);
-  const [timesTextExtrCalled, setTimesTextExtrCalled] = useState(1);
-  const [timescreateQusCalled, setTimescreateQusCalled] = useState(1);
+  const [timesCreateHighSiteCalled, setTimesCreateHighSiteCalled] = useState(1);
+  const [timesCreateHighYtCalled, setTimesCreateHighYtCalled] = useState(1);
   const [currentIndexFlashCards, setCurrentIndexFlashCards] = useState(0);
   const [currentIndexTextExtraction, setCurrentIndexTextExtraction] =
     useState(0);
@@ -61,7 +61,15 @@ const Summary = (props) => {
       nulla debitis. Et fugiat cupiditate reprehenderit nihil hic?
       `,
       pic: "https://i.ytimg.com/vi/RRubcjpTkks/maxresdefault.jpg",
-      tag: ["Java", "Data Type", "Logic"],
+      tag: [
+        "Java",
+        "Data Type",
+        "Logic",
+        "abcd",
+        "rfgdg",
+        "dfgdfg",
+        "dfgdfgdf dfgdf",
+      ],
     },
   ];
 
@@ -138,15 +146,15 @@ const Summary = (props) => {
     doc.save("quiz.pdf");
   };
 
-  const createQuestionAnswers = async () => {
-    setTimescreateQusCalled(timescreateQusCalled + 1);
+  const createHighlightsYt = async () => {
+    setTimesCreateHighYtCalled(timesCreateHighYtCalled + 1);
     setLoading(true);
     setEndOfResult(false);
     setTranscriptError(false);
     console.log("will create ", inputNumber, " questions ");
     chrome.tabs.query({ active: true, currentWindow: true }, async (tabs) => {
       const siteUrl = tabs[0].url;
-      console.log("url from createQuestionAnswers : ", siteUrl);
+      console.log("url from createHighlightsYt : ", siteUrl);
 
       const url = new URL(siteUrl);
       const videoId = new URLSearchParams(url.search).get("v");
@@ -197,7 +205,9 @@ const Summary = (props) => {
           },
           body: JSON.stringify({
             text: `Create ${
-              timescreateQusCalled == 2 || timescreateQusCalled == 3 ? "5" : "2"
+              timesCreateHighYtCalled == 2 || timesCreateHighYtCalled == 3
+                ? "5"
+                : "2"
             } question and answer based on the following context :- 
               ${data.transcription}
             `,
@@ -218,11 +228,11 @@ const Summary = (props) => {
       }
       setHasGeneratedFlashCards(true);
     });
-    console.log("timescreateQusCalled : ", timescreateQusCalled);
+    console.log("timesCreateHighYtCalled : ", timesCreateHighYtCalled);
   };
 
-  const handleTextExtraction = async () => {
-    setTimesTextExtrCalled(timesTextExtrCalled + 1);
+  const createHighlightsSite = async () => {
+    setTimesCreateHighSiteCalled(timesCreateHighSiteCalled + 1);
     setLoading(true);
     setEndOfResult(false);
     setTranscriptError(false);
@@ -279,7 +289,9 @@ const Summary = (props) => {
           },
           body: JSON.stringify({
             text: `Create ${
-              timesTextExtrCalled == 2 || timesTextExtrCalled == 3 ? "5" : "2"
+              timesCreateHighSiteCalled == 2 || timesCreateHighSiteCalled == 3
+                ? "5"
+                : "2"
             } question and answer based on the following context :- 
               ${data.text}
             `,
@@ -301,7 +313,7 @@ const Summary = (props) => {
       }
       setHasExtractedText(true);
     });
-    console.log("timesTextExtrCalled : ", timesTextExtrCalled);
+    console.log("timesCreateHighSiteCalled : ", timesCreateHighSiteCalled);
   };
 
   const [showComp, setShowComp] = useState("Summary");
@@ -311,6 +323,22 @@ const Summary = (props) => {
     setShowComp(e.target.value);
     setRenderedSelectWrapper(true);
   };
+
+  // useEffect(() => {
+  //   console.log("use effect triggered");
+  //
+  //   setIsYoutube(props.isYt);
+  //
+  //   if (isYoutube === "Yes") {
+  //     createHighlightsYt();
+  //     setHasGeneratedFlashCards(true);
+  //     console.log("createHighlightsYt called");
+  //   } else if (isYoutube === "No") {
+  //     handleTextExtraction();
+  //     setHasExtractedText(true);
+  //     console.log("handleTextExtraction called");
+  //   }
+  // }, [isYoutube]);
 
   return (
     <>
@@ -368,13 +396,19 @@ const Summary = (props) => {
       {showComp === "FlashCards" ? <FlashCards isYt={props.isYt} /> : null}
       {showComp === "Summary" ? (
         <div
-          className="flashCardsWrapper"
+          className="flashCardsWrapper bg-white"
           style={{
             width: isListView ? "" : "100%",
             padding: "20px",
           }}
         >
-          <h1 className="text-center text-black">Summary Highlights</h1>
+          <h1 className="text-center text-black">
+            {props.isYt === "Yes"
+              ? "Is Youtube"
+              : props.isYt === "No"
+              ? "Not Youtube"
+              : "idk"}
+          </h1>
 
           {summaryData.map((summary) => (
             <div
@@ -386,15 +420,15 @@ const Summary = (props) => {
                   {summary.title}
                 </h5>
               </div>
-              <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+              {/* <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
                 <img
                   className="MuiBox-root css-oafhs5"
                   src={summary.pic}
                   alt={summary.title}
                 ></img>
-              </div>
+              </div> */}
               <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                <div className="MuiBox-root css-1vfxzmk">
+                <div className="MuiBox-root css-1vfxzmk text-center">
                   <p className="p-[10px]">{summary.highlight}</p>
                 </div>
               </div>

@@ -286,9 +286,7 @@ const FlashCards = (props) => {
 
   useEffect(() => {
     console.log("use effect triggered");
-    //
     setIsYoutube(props.isYt);
-    //
     if (isYoutube === "Yes") {
       createQuestionAnswers();
       setHasGeneratedFlashCards(true);
