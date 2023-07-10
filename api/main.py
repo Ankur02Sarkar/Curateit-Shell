@@ -175,11 +175,11 @@ async def create_highlight(item: Item):
                         },
                         "keypoints": {
                             "type": "object",
-                            "description": "An array of 7 main keywords from the given text separated by commas",
+                            "description": "An array of 7 main one word keywords from the highlight",
                             "properties": {
                                 "point": {
                                     "type": "string",
-                                    "description": "The current keyword from the given text",
+                                    "description": "The one word keyword from the highlight",
                                 }
                             },
                             "required": ["point"],
@@ -194,5 +194,6 @@ async def create_highlight(item: Item):
     arguments_json = json.loads(
         answer["choices"][0]["message"]["function_call"]["arguments"]
     )
-    print("ans in api :: ", json.dumps(arguments_json, indent=2))
+    print("ans in api :: ", answer["choices"][0]["message"]["function_call"]["arguments"])
+    print("args json : ", arguments_json["highlight"])
     return {"message": arguments_json["highlight"]}
