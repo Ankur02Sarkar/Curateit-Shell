@@ -195,5 +195,4 @@ async def create_highlight(item: Item):
         answer["choices"][0]["message"]["function_call"]["arguments"]
     )
     print("ans in api :: ", answer["choices"][0]["message"]["function_call"]["arguments"])
-    print("args json : ", arguments_json["highlight"])
-    return {"message": arguments_json["highlight"]}
+    return {"message": arguments_json}

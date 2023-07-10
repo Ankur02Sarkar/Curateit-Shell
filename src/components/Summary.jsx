@@ -37,43 +37,37 @@ const Summary = (props) => {
   const [radioSelection, setRadioSelection] = useState("flashCardsWrapper");
   const [transcriptError, setTranscriptError] = useState(false);
   const [isListView, setListView] = useState(true);
-  const [summaryData, setSummaryData] = useState([]);
   const [highlight, setHighlight] = useState("");
+  const [summaryData, setSummaryData] = useState({});
 
-  // const summaryData = [
-  //   {
-  //     title: "Learn Java in 14 Minutes",
-  //     highlight: `Lorem ipsum, dolor sit amet consectetur adipisicing elit. Beatae,
-  //     necessitatibus delectus hic nobis sunt totam facilis nulla
-  //     perspiciatis id veritatis eius eum tempora temporibus
-  //     reprehenderit vel illo, molestiae, quos quibusdam! Deserunt
-  //     laborum modi sapiente molestias quo eius, consequuntur iste!
-  //     Doloremque cupiditate ipsa nisi accusantium nemo earum placeat vel
-  //     eos maiores velit quia autem, officia tempora expedita impedit
-  //     fuga? Magni, atque. Impedit blanditiis corrupti ab ad eum, placeat
-  //     fugiat assumenda, eveniet mollitia a voluptas. Delectus deserunt
-  //     enim laborum similique, exercitationem dicta quibusdam adipisci
-  //     commodi, eaque dolore pariatur nostrum, sed ad itaque! Quas maxime
-  //     repellat deserunt id esse tempora impedit nostrum praesentium
-  //     accusamus, expedita commodi minus consequatur eligendi, facilis ut
-  //     porro accusantium, voluptatum fugit eum qui eos placeat earum
-  //     fuga? Eum, et! Deserunt quibusdam assumenda maiores quidem dolorem
-  //     expedita quod odio ex, accusantium laudantium soluta dignissimos
-  //     non provident, animi, voluptate tempora odit sequi perferendis
-  //     nulla debitis. Et fugiat cupiditate reprehenderit nihil hic?
-  //     `,
-  //     pic: "https://i.ytimg.com/vi/RRubcjpTkks/maxresdefault.jpg",
-  //     tag: [
-  //       "Java",
-  //       "Data Type",
-  //       "Logic",
-  //       "abcd",
-  //       "rfgdg",
-  //       "dfgdfg",
-  //       "dfgdfgdf dfgdf",
-  //     ],
-  //   },
-  // ];
+  // const summaryData = {
+  //   title: "The Three Little Pigs",
+  //   highlight: `Once upon a time there was an old mother pig who had three little pigs and not
+  //   enough food to feed them. So when they were old enough, she sent them out into the world to
+  //   seek their fortunes. The first little pig was very lazy. He built his house out of straw.
+  //   The second little pig worked a little bit harder but he was somewhat lazy too and he built
+  //   his house out of sticks. The third little pig worked hard all day and built his house with
+  //   bricks. The wolf tried to blow down the houses of the first two pigs but failed. The wolf
+  //   then tried to come down the chimney of the third pig's house but fell into a pot of boiling
+  //   water and was eaten by the pigs.`,
+  //   keypoints: [
+  //     {
+  //       point: "Three little pigs",
+  //     },
+  //     {
+  //       point: "Lazy pigs and their houses",
+  //     },
+  //     {
+  //       point: "Hardworking pig and his house",
+  //     },
+  //     {
+  //       point: "Wolf's failed attempts",
+  //     },
+  //     {
+  //       point: "Wolf falls into boiling water and is eaten",
+  //     },
+  //   ],
+  // };
 
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("Base Url : ", baseUrl);
@@ -180,12 +174,6 @@ const Summary = (props) => {
 
         const data = await response.json();
 
-        // if (currentIndexFlashCards + 3000 >= data.transcription.length) {
-        //   setCurrentIndexFlashCards(0);
-        // } else {
-        //   setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
-        // }
-
         setTranscript(data.transcription);
         console.log("Transcript : ", data.transcription);
         setHighlight(data.transcription);
@@ -195,29 +183,6 @@ const Summary = (props) => {
           setEndOfResult(true);
           return;
         }
-
-        // const resp = await fetch(`${baseUrl}/ask_query/`, {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     text: `Create ${
-        //       timesCreateHighYtCalled == 2 || timesCreateHighYtCalled == 3
-        //         ? "5"
-        //         : "2"
-        //     } question and answer based on the following context :-
-        //       ${data.transcription}
-        //     `,
-        //   }),
-        // });
-
-        // let result = await resp.json();
-        // console.log("res from flashcards api :: ", result.message);
-        // const parsedResult = result.message;
-        // console.log("parsed flashcards res : ", parsedResult);
-        // setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-        // setCurrentIndexFlashCards(currentIndexFlashCards + 3000);
       } catch (error) {
         console.error("error : ", error);
         setTranscriptError(true);
@@ -260,12 +225,6 @@ const Summary = (props) => {
 
         const data = await response.json();
 
-        // if (currentIndexTextExtraction + 3000 >= data.text.length) {
-        //   setCurrentIndexTextExtraction(0); // Reset index to 0 if we've reached the end
-        // } else {
-        //   setCurrentIndexTextExtraction(currentIndexTextExtraction + 3000);
-        // }
-
         setText(data.text);
         console.log("Text : ", data.text);
         setHighlight(data.text);
@@ -294,8 +253,6 @@ const Summary = (props) => {
         const parsedResult = result.message;
         console.log("parsed summary res : ", parsedResult);
         setSummaryData(parsedResult);
-        // setQuizData((oldQuizData) => [...oldQuizData, ...parsedResult]);
-        // setCurrentIndexTextExtraction(currentIndexTextExtraction + 3000);
       } catch (error) {
         console.error(error);
         setTranscriptError(true);
@@ -387,73 +344,52 @@ const Summary = (props) => {
       {showComp === "FlashCards" ? <FlashCards isYt={props.isYt} /> : null}
       {showComp === "Summary" ? (
         <div
-          className="flashCardsWrapper bg-white"
+          className="flashCardsWrapper"
           style={{
             width: isListView ? "" : "100%",
             padding: "20px",
           }}
         >
-          <h1 className="text-center text-black">
-            {props.isYt === "Yes"
-              ? "Is Youtube"
-              : props.isYt === "No"
-              ? "Not Youtube"
-              : "idk"}
-          </h1>
           {summaryData && (
-            <>
-              {summaryData.map((summary) => (
-                <div
-                  key={summary.title}
-                  className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-1cym44n text-black"
-                >
-                  <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                    <h5 className="MuiTypography-root MuiTypography-h5 css-11604fz text-center">
-                      {summary.title}
-                    </h5>
-                  </div>
-                  {/* <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                <img
-                  className="MuiBox-root css-oafhs5"
-                  src={summary.pic}
-                  alt={summary.title}
-                ></img>
-              </div> */}
-                  <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                    <div className="MuiBox-root css-1vfxzmk text-center">
-                      {/* <p className="p-[10px]">{highlight}</p> */}
-                      <p className="p-[10px]">{summary.highlight}</p>
-                    </div>
-                  </div>
-                  <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-tuxzvu">
-                    <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                      <div className="MuiBox-root css-jejy0m">
-                        <strong className="MuiTypography-root MuiTypography-subtitle1 css-11arlvz">
-                          Key Mentions
-                        </strong>
-                        <div className="MuiGrid-root MuiGrid-container css-1d3bbye">
-                          <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                            {summary.tag.map((tag, index) => (
-                              <div
-                                key={index}
-                                className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
-                                tabIndex="0"
-                                role="button"
-                              >
-                                <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
-                                  <span className="">{tag}</span>
-                                </span>
-                                <span className="MuiTouchRipple-root css-w0pj6f"></span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+            <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-1cym44n text-black">
+              <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                <h5 className="MuiTypography-root MuiTypography-h5 css-11604fz text-center">
+                  {summaryData.title}
+                </h5>
+              </div>
+              <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                <div className="MuiBox-root css-1vfxzmk text-center">
+                  <p className="p-[10px]">{summaryData.highlight}</p>
+                </div>
+              </div>
+              <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-tuxzvu">
+                <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                  <div className="MuiBox-root css-jejy0m">
+                    <strong className="MuiTypography-root MuiTypography-subtitle1 css-11arlvz">
+                      Key Mentions
+                    </strong>
+                    <div className="MuiGrid-root MuiGrid-container css-1d3bbye">
+                      <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                        {summaryData.keypoints &&
+                          summaryData.keypoints.map((keypt, index) => (
+                            <div
+                              key={index}
+                              className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
+                              tabIndex="0"
+                              role="button"
+                            >
+                              <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
+                                <span className="">{keypt.point}</span>
+                              </span>
+                              <span className="MuiTouchRipple-root css-w0pj6f"></span>
+                            </div>
+                          ))}
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
-            </>
+              </div>
+            </div>
           )}
           {loading && <Loader />}
           {endOfResult && (
