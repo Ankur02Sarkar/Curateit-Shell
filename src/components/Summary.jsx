@@ -162,7 +162,7 @@ const Summary = (props) => {
             reject(new Error("Transcription fetch operation timed out"));
           }, 60000); // 60 seconds
 
-          fetch(`${baseUrl}/transcriptYt/${videoId}`).then((response) => {
+          fetch(`${baseUrl}/transcript/${videoId}/0/8000`).then((response) => {
             clearTimeout(timer);
             resolve(response);
           });
@@ -171,7 +171,7 @@ const Summary = (props) => {
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
+        console.log("resp yt : ", response);
         const data = await response.json();
 
         setTranscript(data.transcription);
@@ -183,6 +183,25 @@ const Summary = (props) => {
           setEndOfResult(true);
           return;
         }
+
+        const resp = await fetch(`${baseUrl}/create_highlight/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            text: `Create the summary of the following text :-
+              ${data.transcription}
+            `,
+          }),
+        });
+
+        let result = await resp.json();
+
+        console.log("res from summary api :: ", result.message);
+        const parsedResult = result.message;
+        console.log("parsed summary res : ", parsedResult);
+        setSummaryData(parsedResult);
       } catch (error) {
         console.error("error : ", error);
         setTranscriptError(true);
@@ -362,33 +381,68 @@ const Summary = (props) => {
                   <p className="p-[10px]">{summaryData.highlight}</p>
                 </div>
               </div>
-              <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-tuxzvu">
-                <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                  <div className="MuiBox-root css-jejy0m">
-                    <strong className="MuiTypography-root MuiTypography-subtitle1 css-11arlvz">
-                      Key Mentions
-                    </strong>
-                    <div className="MuiGrid-root MuiGrid-container css-1d3bbye">
-                      <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                        {summaryData.keypoints &&
-                          summaryData.keypoints.map((keypt, index) => (
-                            <div
-                              key={index}
-                              className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
-                              tabIndex="0"
-                              role="button"
-                            >
-                              <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
-                                <span className="">{keypt.point}</span>
-                              </span>
-                              <span className="MuiTouchRipple-root css-w0pj6f"></span>
+
+              {summaryData.keypoints && (
+                <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-tuxzvu">
+                  <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                    <div className="MuiBox-root css-jejy0m">
+                      <strong className="MuiTypography-root MuiTypography-subtitle1 css-11arlvz">
+                        Key Mentions
+                      </strong>
+                      <div className="flex flex-wrap">
+                        {summaryData.keypoints.map((keypt, index) => (
+                          <div
+                            key={index}
+                            style={{
+                              flex: "1 0 20%",
+                              boxSizing: "border-box",
+                              padding: "10px",
+                              textAlign: "center",
+                              height: "fit-content",
+                            }}
+                            className="MuiGrid-root MuiGrid-container css-1d3bbye"
+                          >
+                            <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                              <div
+                                className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
+                                tabIndex="0"
+                                role="button"
+                              >
+                                <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
+                                  <span className="">{keypt.point}</span>
+                                </span>
+                                <span className="MuiTouchRipple-root css-w0pj6f"></span>
+                              </div>
                             </div>
-                          ))}
+                          </div>
+                        ))}
                       </div>
+
+                      {/* <div className="flex flex-wrap">
+                        {summaryData.keypoints.map((keypt, index) => (
+                          <div
+                            key={index}
+                            className="MuiGrid-root MuiGrid-container css-1d3bbye"
+                          >
+                            <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
+                              <div
+                                className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
+                                tabIndex="0"
+                                role="button"
+                              >
+                                <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
+                                  <span className="">{keypt.point}</span>
+                                </span>
+                                <span className="MuiTouchRipple-root css-w0pj6f"></span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div> */}
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
             </div>
           )}
           {loading && <Loader />}

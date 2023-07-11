@@ -125,16 +125,27 @@ async def ask_query(item: Item):
     print("ans in api :: ", json.dumps(arguments_json["qna"], indent=2))
     return {"message": arguments_json["qna"]}
 
+# @app.get("/transcript/{video_id}/{start_index}/{end_index}")
+# async def get_transcript(video_id: str, start_index: int, end_index: int):
+#     try:
+#         transcript = YouTubeTranscriptApi.get_transcript(video_id)
+#         all_text = " ".join([entry["text"] for entry in transcript])
+#         if end_index >= len(all_text):
+#             end_index = len(all_text)
+#         return {"transcription": all_text[start_index:end_index]}
+#     except Exception as e:
+#         return {"error": str(e)}
 
 @app.get("/transcriptYt/{video_id}")
 async def transcriptYt(video_id: str):
     try:
         transcript = YouTubeTranscriptApi.transcriptYt(video_id)
         all_text = " ".join([entry["text"] for entry in transcript])
+        print("transcript : ", transcript)
+        print("all_text : ", all_text)
         return {"transcription": all_text}
     except Exception as e:
         return {"error": str(e)}
-
 
 @app.get("/gettext/{url:path}")
 def gettext(url: str):
@@ -145,7 +156,6 @@ def gettext(url: str):
         return {"text": article.cleaned_text}
     except Exception as e:
         return {"error": str(e)}
-
 
 @app.post("/create_highlight/")
 async def create_highlight(item: Item):
