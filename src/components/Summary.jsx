@@ -40,35 +40,6 @@ const Summary = (props) => {
   const [highlight, setHighlight] = useState("");
   const [summaryData, setSummaryData] = useState({});
 
-  // const summaryData = {
-  //   title: "The Three Little Pigs",
-  //   highlight: `Once upon a time there was an old mother pig who had three little pigs and not
-  //   enough food to feed them. So when they were old enough, she sent them out into the world to
-  //   seek their fortunes. The first little pig was very lazy. He built his house out of straw.
-  //   The second little pig worked a little bit harder but he was somewhat lazy too and he built
-  //   his house out of sticks. The third little pig worked hard all day and built his house with
-  //   bricks. The wolf tried to blow down the houses of the first two pigs but failed. The wolf
-  //   then tried to come down the chimney of the third pig's house but fell into a pot of boiling
-  //   water and was eaten by the pigs.`,
-  //   keypoints: [
-  //     {
-  //       point: "Three little pigs",
-  //     },
-  //     {
-  //       point: "Lazy pigs and their houses",
-  //     },
-  //     {
-  //       point: "Hardworking pig and his house",
-  //     },
-  //     {
-  //       point: "Wolf's failed attempts",
-  //     },
-  //     {
-  //       point: "Wolf falls into boiling water and is eaten",
-  //     },
-  //   ],
-  // };
-
   const baseUrl = process.env.REACT_APP_PYTHON_API;
   console.log("Base Url : ", baseUrl);
   console.log("isYt in flashcards : ", props.isYt);
@@ -232,10 +203,12 @@ const Summary = (props) => {
             reject(new Error("Text extraction fetch operation timed out"));
           }, 60000);
 
-          fetch(`${baseUrl}/gettext/${encodedUrl}`).then((response) => {
-            clearTimeout(timer);
-            resolve(response);
-          });
+          fetch(`${baseUrl}/extract_article/${encodedUrl}/0/8000`).then(
+            (response) => {
+              clearTimeout(timer);
+              resolve(response);
+            }
+          );
         });
 
         if (!response.ok) {
@@ -417,28 +390,6 @@ const Summary = (props) => {
                           </div>
                         ))}
                       </div>
-
-                      {/* <div className="flex flex-wrap">
-                        {summaryData.keypoints.map((keypt, index) => (
-                          <div
-                            key={index}
-                            className="MuiGrid-root MuiGrid-container css-1d3bbye"
-                          >
-                            <div className="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 css-15j76c0">
-                              <div
-                                className="MuiButtonBase-root MuiChip-root MuiChip-outlined MuiChip-sizeMedium MuiChip-colorDefault MuiChip-clickable MuiChip-clickableColorDefault MuiChip-outlinedDefault css-n08mak"
-                                tabIndex="0"
-                                role="button"
-                              >
-                                <span className="MuiChip-label MuiChip-labelMedium css-9iedg7">
-                                  <span className="">{keypt.point}</span>
-                                </span>
-                                <span className="MuiTouchRipple-root css-w0pj6f"></span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div> */}
                     </div>
                   </div>
                 </div>
